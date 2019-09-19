@@ -1,0 +1,378 @@
+{
+  "H": {
+    "atomic_number": 1,
+    "standard_atomic_weight": 1.007975
+  },
+  "He": {
+    "atomic_number": 2,
+    "standard_atomic_weight": 4.002602
+  },
+  "Li": {
+    "atomic_number": 3,
+    "standard_atomic_weight": 6.967499999999999
+  },
+  "Be": {
+    "atomic_number": 4,
+    "standard_atomic_weight": 9.0121831
+  },
+  "B": {
+    "atomic_number": 5,
+    "standard_atomic_weight": 10.8135
+  },
+  "C": {
+    "atomic_number": 6,
+    "standard_atomic_weight": 12.0106
+  },
+  "N": {
+    "atomic_number": 7,
+    "standard_atomic_weight": 14.006855
+  },
+  "O": {
+    "atomic_number": 8,
+    "standard_atomic_weight": 15.9994
+  },
+  "F": {
+    "atomic_number": 9,
+    "standard_atomic_weight": 18.998403163
+  },
+  "Ne": {
+    "atomic_number": 10,
+    "standard_atomic_weight": 20.1797
+  },
+  "Na": {
+    "atomic_number": 11,
+    "standard_atomic_weight": 22.98976928
+  },
+  "Mg": {
+    "atomic_number": 12,
+    "standard_atomic_weight": 24.3055
+  },
+  "Al": {
+    "atomic_number": 13,
+    "standard_atomic_weight": 26.9815385
+  },
+  "Si": {
+    "atomic_number": 14,
+    "standard_atomic_weight": 28.085
+  },
+  "P": {
+    "atomic_number": 15,
+    "standard_atomic_weight": 30.973761998
+  },
+  "S": {
+    "atomic_number": 16,
+    "standard_atomic_weight": 32.067499999999995
+  },
+  "Cl": {
+    "atomic_number": 17,
+    "standard_atomic_weight": 35.451499999999996
+  },
+  "Ar": {
+    "atomic_number": 18,
+    "standard_atomic_weight": 39.948
+  },
+  "K": {
+    "atomic_number": 19,
+    "standard_atomic_weight": 39.0983
+  },
+  "Ca": {
+    "atomic_number": 20,
+    "standard_atomic_weight": 40.078
+  },
+  "Sc": {
+    "atomic_number": 21,
+    "standard_atomic_weight": 44.955908
+  },
+  "Ti": {
+    "atomic_number": 22,
+    "standard_atomic_weight": 47.867
+  },
+  "V": {
+    "atomic_number": 23,
+    "standard_atomic_weight": 50.9415
+  },
+  "Cr": {
+    "atomic_number": 24,
+    "standard_atomic_weight": 51.9961
+  },
+  "Mn": {
+    "atomic_number": 25,
+    "standard_atomic_weight": 54.938044
+  },
+  "Fe": {
+    "atomic_number": 26,
+    "standard_atomic_weight": 55.845
+  },
+  "Co": {
+    "atomic_number": 27,
+    "standard_atomic_weight": 58.933194
+  },
+  "Ni": {
+    "atomic_number": 28,
+    "standard_atomic_weight": 58.6934
+  },
+  "Cu": {
+    "atomic_number": 29,
+    "standard_atomic_weight": 63.546
+  },
+  "Zn": {
+    "atomic_number": 30,
+    "standard_atomic_weight": 65.38
+  },
+  "Ga": {
+    "atomic_number": 31,
+    "standard_atomic_weight": 69.723
+  },
+  "Ge": {
+    "atomic_number": 32,
+    "standard_atomic_weight": 72.63
+  },
+  "As": {
+    "atomic_number": 33,
+    "standard_atomic_weight": 74.921595
+  },
+  "Se": {
+    "atomic_number": 34,
+    "standard_atomic_weight": 78.971
+  },
+  "Br": {
+    "atomic_number": 35,
+    "standard_atomic_weight": 79.904
+  },
+  "Kr": {
+    "atomic_number": 36,
+    "standard_atomic_weight": 83.798
+  },
+  "Rb": {
+    "atomic_number": 37,
+    "standard_atomic_weight": 85.4678
+  },
+  "Sr": {
+    "atomic_number": 38,
+    "standard_atomic_weight": 87.62
+  },
+  "Y": {
+    "atomic_number": 39,
+    "standard_atomic_weight": 88.90584
+  },
+  "Zr": {
+    "atomic_number": 40,
+    "standard_atomic_weight": 91.224
+  },
+  "Nb": {
+    "atomic_number": 41,
+    "standard_atomic_weight": 92.90637
+  },
+  "Mo": {
+    "atomic_number": 42,
+    "standard_atomic_weight": 95.95
+  },
+  "Tc": {
+    "atomic_number": 43,
+    "standard_atomic_weight": 98.0
+  },
+  "Ru": {
+    "atomic_number": 44,
+    "standard_atomic_weight": 101.07
+  },
+  "Rh": {
+    "atomic_number": 45,
+    "standard_atomic_weight": 102.9055
+  },
+  "Pd": {
+    "atomic_number": 46,
+    "standard_atomic_weight": 106.42
+  },
+  "Ag": {
+    "atomic_number": 47,
+    "standard_atomic_weight": 107.8682
+  },
+  "Cd": {
+    "atomic_number": 48,
+    "standard_atomic_weight": 112.414
+  },
+  "In": {
+    "atomic_number": 49,
+    "standard_atomic_weight": 114.818
+  },
+  "Sn": {
+    "atomic_number": 50,
+    "standard_atomic_weight": 118.71
+  },
+  "Sb": {
+    "atomic_number": 51,
+    "standard_atomic_weight": 121.76
+  },
+  "Te": {
+    "atomic_number": 52,
+    "standard_atomic_weight": 127.6
+  },
+  "I": {
+    "atomic_number": 53,
+    "standard_atomic_weight": 126.90447
+  },
+  "Xe": {
+    "atomic_number": 54,
+    "standard_atomic_weight": 131.293
+  },
+  "Cs": {
+    "atomic_number": 55,
+    "standard_atomic_weight": 132.90545196
+  },
+  "Ba": {
+    "atomic_number": 56,
+    "standard_atomic_weight": 137.327
+  },
+  "La": {
+    "atomic_number": 57,
+    "standard_atomic_weight": 138.90547
+  },
+  "Ce": {
+    "atomic_number": 58,
+    "standard_atomic_weight": 140.116
+  },
+  "Pr": {
+    "atomic_number": 59,
+    "standard_atomic_weight": 140.90766
+  },
+  "Nd": {
+    "atomic_number": 60,
+    "standard_atomic_weight": 144.242
+  },
+  "Pm": {
+    "atomic_number": 61,
+    "standard_atomic_weight": 145.0
+  },
+  "Sm": {
+    "atomic_number": 62,
+    "standard_atomic_weight": 150.36
+  },
+  "Eu": {
+    "atomic_number": 63,
+    "standard_atomic_weight": 151.964
+  },
+  "Gd": {
+    "atomic_number": 64,
+    "standard_atomic_weight": 157.25
+  },
+  "Tb": {
+    "atomic_number": 65,
+    "standard_atomic_weight": 158.92535
+  },
+  "Dy": {
+    "atomic_number": 66,
+    "standard_atomic_weight": 162.5
+  },
+  "Ho": {
+    "atomic_number": 67,
+    "standard_atomic_weight": 164.93033
+  },
+  "Er": {
+    "atomic_number": 68,
+    "standard_atomic_weight": 167.259
+  },
+  "Tm": {
+    "atomic_number": 69,
+    "standard_atomic_weight": 168.93422
+  },
+  "Yb": {
+    "atomic_number": 70,
+    "standard_atomic_weight": 173.054
+  },
+  "Lu": {
+    "atomic_number": 71,
+    "standard_atomic_weight": 174.9668
+  },
+  "Hf": {
+    "atomic_number": 72,
+    "standard_atomic_weight": 178.49
+  },
+  "Ta": {
+    "atomic_number": 73,
+    "standard_atomic_weight": 180.94788
+  },
+  "W": {
+    "atomic_number": 74,
+    "standard_atomic_weight": 183.84
+  },
+  "Re": {
+    "atomic_number": 75,
+    "standard_atomic_weight": 186.207
+  },
+  "Os": {
+    "atomic_number": 76,
+    "standard_atomic_weight": 190.23
+  },
+  "Ir": {
+    "atomic_number": 77,
+    "standard_atomic_weight": 192.217
+  },
+  "Pt": {
+    "atomic_number": 78,
+    "standard_atomic_weight": 195.084
+  },
+  "Au": {
+    "atomic_number": 79,
+    "standard_atomic_weight": 196.966569
+  },
+  "Hg": {
+    "atomic_number": 80,
+    "standard_atomic_weight": 200.592
+  },
+  "Tl": {
+    "atomic_number": 81,
+    "standard_atomic_weight": 204.3835
+  },
+  "Pb": {
+    "atomic_number": 82,
+    "standard_atomic_weight": 207.2
+  },
+  "Bi": {
+    "atomic_number": 83,
+    "standard_atomic_weight": 208.9804
+  },
+  "Po": {
+    "atomic_number": 84,
+    "standard_atomic_weight": 209.0
+  },
+  "At": {
+    "atomic_number": 85,
+    "standard_atomic_weight": 210.0
+  },
+  "Rn": {
+    "atomic_number": 86,
+    "standard_atomic_weight": 222.0
+  },
+  "Fr": {
+    "atomic_number": 87,
+    "standard_atomic_weight": 223.0
+  },
+  "Ra": {
+    "atomic_number": 88,
+    "standard_atomic_weight": 226.0
+  },
+  "Ac": {
+    "atomic_number": 89,
+    "standard_atomic_weight": 227.0
+  },
+  "Th": {
+    "atomic_number": 90,
+    "standard_atomic_weight": 232.0377
+  },
+  "Pa": {
+    "atomic_number": 91,
+    "standard_atomic_weight": 231.03588
+  },
+  "U": {
+    "atomic_number": 92,
+    "standard_atomic_weight": 238.02891
+  },
+  "Np": {
+    "atomic_number": 93,
+    "standard_atomic_weight": 237.0
+  },
+  "Pu": {
+    "atomic_number": 94,
+    "standard_atomic_weight": 244.0
+  }
+}
