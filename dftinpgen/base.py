@@ -12,7 +12,7 @@ class DftInputGeneratorError(Exception):
 class DftInputGenerator(object):
     """Base class to generate input files for a DFT calculation."""
 
-    def __init__(self, crystal_structure=None, dft_code=None,
+    def __init__(self, crystal_structure=None, dft_package=None,
                  base_recipe=None, custom_sett_file=None, write_location=None,
                  overwrite_files=None, **kwargs):
         """
@@ -25,25 +25,25 @@ class DftInputGenerator(object):
             Path to the file with the input crystal structure or an
             :class:`ase.Atoms` object resulting from `ase.io.read([filename])`.
 
-        dft_code: str, optional
+        dft_package: str, optional
             Name of the DFT package to use for the calculation. Currently
-            available options are "pwscf" and "vasp" (case-insensitive).
+            available options are "qe" and "vasp" (case-insensitive).
 
-            Defaults to "pwscf".
+            Defaults to "qe".
 
         base_recipe: str, optional
             The "base" calculation settings to use--must be one of the
-            pre-defined recipes provided for the specified `dft_code`.
+            pre-defined recipes provided for the specified `dft_package`.
 
             Pre-defined recipes are in
-            [INSTALL_PATH]/[dft_code]/settings/base_recipes/[recipe].json
+            [INSTALL_PATH]/[dft_package]/settings/base_recipes/[recipe].json
 
-            For example, if `dft_code` = "vasp" and `base_recipe` = "scf", the
+            For example, if `dft_package` = "vasp", `base_recipe` = "scf", the
             settings in "dftinpgen/vasp/settings/base_recipes/scf.json" are
             used.
 
             Defaults to the pre-defined "scf" settings (corresponding to the
-            specified `dft_code`).
+            specified `dft_package`).
 
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
@@ -67,8 +67,8 @@ class DftInputGenerator(object):
         self._crystal_structure = None
         self._read_crystal_structure(crystal_structure, **kwargs)
 
-        self._dft_code = 'pwscf'
-        self.dft_code = dft_code
+        self._dft_package = 'qe'
+        self.dft_package = dft_package
 
         self._base_recipe = 'scf'
         self.base_recipe = base_recipe
@@ -102,13 +102,13 @@ class DftInputGenerator(object):
             raise TypeError(msg)
 
     @property
-    def dft_code(self):
-        return self._dft_code
+    def dft_package(self):
+        return self._dft_package
 
-    @dft_code.setter
-    def dft_code(self, dft_code):
-        if dft_code is not None:
-            self._dft_code = dft_code.lower()
+    @dft_package.setter
+    def dft_package(self, dft_package):
+        if dft_package is not None:
+            self._dft_package = dft_package.lower()
 
     @property
     def base_recipe(self):

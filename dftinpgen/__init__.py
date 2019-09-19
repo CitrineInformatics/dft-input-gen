@@ -1,3 +1,3 @@
 from dftinpgen.data import *
-from dftinpgen.pwscf import *
+from dftinpgen.qe import *
 from dftinpgen.vasp import *
