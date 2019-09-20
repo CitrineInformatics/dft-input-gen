@@ -11,7 +11,8 @@
     "ecutrho": 240,
     "occupations": "smearing",
     "smearing": "m-v",
-    "degauss": 0.01,
+    "degauss": 0.02,
+    "mixing_beta": 0.5,
     "kpoints": {
         "scheme": "automatic",
         "spacing": 0.2,
@@ -19,5 +20,6 @@
     },
     "pseudo_set": "gbrv",
     "hubbard_set": "wang",
-    "namelists": ["control", "system", "electrons"]
+    "namelists": ["control", "system", "electrons"],
+    "cards": ["atomic_species", "atomic_positions", "kpoints", "cell_parameters"]
 }
