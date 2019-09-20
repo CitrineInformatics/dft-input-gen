@@ -1,5 +1,7 @@
 import six
 
+import numpy as np
+
 import ase
 from ase import io
 
@@ -143,3 +145,10 @@ class DftInputGenerator(object):
     @overwrite_files.setter
     def overwrite_files(self, overwrite_files):
         self._overwrite_files = overwrite_files
+
+    def get_kpoint_grid_from_spacing(self, spacing):
+        if not self.crystal_structure:
+            msg = 'Crystal structure not found'
+            raise DftInputGeneratorError(msg)
+        rcell = 2*np.pi*(np.linalg.inv(self.crystal_structure.cell).T)
+        return list(map(int, np.ceil(np.linalg.norm(rcell, axis=1)/spacing)))
