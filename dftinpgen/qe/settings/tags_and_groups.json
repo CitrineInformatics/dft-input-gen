@@ -10,14 +10,14 @@
       "atomic_forces"
     ], 
     "namelists": [
-      "&control", 
-      "&system", 
-      "&electrons", 
-      "&ions", 
-      "&cell"
+      "control",
+      "system",
+      "electrons",
+      "ions",
+      "cell"
     ], 
     "namelist_tags": {
-      "&electrons": [
+      "electrons": [
         "electron_maxstep", 
         "scf_must_converge", 
         "conv_thr", 
@@ -42,7 +42,7 @@
         "tqr", 
         "real_space"
       ], 
-      "&ions": [
+      "ions": [
         "ion_dynamics", 
         "ion_positions", 
         "pot_extrapolation", 
@@ -62,7 +62,7 @@
         "w_1", 
         "w_2"
       ], 
-      "&cell": [
+      "cell": [
         "cell_dynamics", 
         "press", 
         "wmass", 
@@ -70,7 +70,7 @@
         "press_conv_thr", 
         "cell_dofree"
       ], 
-      "&control": [
+      "control": [
         "calculation", 
         "title", 
         "verbosity", 
@@ -101,7 +101,7 @@
         "lfcpopt", 
         "gate"
       ], 
-      "&system": [
+      "system": [
         "ibrav", 
         "celldm", 
         "A", 
