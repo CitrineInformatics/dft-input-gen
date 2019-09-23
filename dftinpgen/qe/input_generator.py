@@ -7,6 +7,16 @@ from dftinpgen.qe.settings import QE_TAGS
 from dftinpgen.qe.settings.base_recipes import QE_BASE_RECIPES
 
 
+def qe_val_formatter(val):
+    """Format values for QE tags into strings."""
+    if isinstance(val, bool):
+        return '.{}.'.format(str(val).lower())
+    elif isinstance(val, six.string_types):
+        return '"{}"'.format(val)
+    else:
+        return str(val)
+
+
 class PwInputGeneratorError(Exception):
     pass
 
@@ -71,27 +81,18 @@ class PwxInputGenerator(DftInputGenerator):
                 calc_sett.update(json.load(fr))
         return calc_sett
 
-    @staticmethod
-    def qe_val_formatter(val):
-        if isinstance(val, bool):
-            return '.{}.'.format(str(val).lower())
-        elif isinstance(val, six.string_types):
-            return '"{}"'.format(val)
-        else:
-            return str(val)
-
     def namelist_to_str(self, namelist):
         calc_sett = self.calculation_settings
         lines = ['&{}'.format(namelist.upper())]
         for tag in QE_TAGS['pw.x']['namelist_tags'][namelist]:
             if tag in calc_sett:
                 lines.append('    {} = {}'.format(
-                    tag, self.qe_val_formatter(calc_sett[tag])))
+                    tag, qe_val_formatter(calc_sett[tag])))
         lines.append('/')
         return '\n'.join(lines)
 
     @property
-    def namelists_as_str(self):
+    def all_namelists_as_str(self):
         blocks = []
         for namelist in QE_TAGS['pw.x']['namelists']:
             if namelist in self.calculation_settings.get('namelists', []):
@@ -99,21 +100,21 @@ class PwxInputGenerator(DftInputGenerator):
         return '\n'.join(blocks)
 
     @property
-    def atomic_species_as_str(self):
+    def atomic_species_card(self):
         if self.crystal_structure is None:
             return
-        species = set(self.crystal_structure.get_chemical_symbols())
+        species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         lines = ['ATOMIC_SPECIES']
-        for specie in species:
+        for spec in species:
             lines.append('{:4s}  {:12.8f}  {}'.format(
-                specie,
-                STANDARD_ATOMIC_WEIGHTS[specie]['standard_atomic_weight'],
+                spec,
+                STANDARD_ATOMIC_WEIGHTS[spec]['standard_atomic_weight'],
                 'PSPwoooo'
             ))
         return '\n'.join(lines)
 
     @property
-    def atomic_positions_as_str(self):
+    def atomic_positions_card(self):
         if self.crystal_structure is None:
             return
         symbols = self.crystal_structure.get_chemical_symbols()
@@ -124,7 +125,7 @@ class PwxInputGenerator(DftInputGenerator):
         return '\n'.join(lines)
 
     @property
-    def kpoints_as_str(self):
+    def kpoints_card(self):
         if self.crystal_structure is None:
             return
         kpoints_sett = self.calculation_settings.get('kpoints', {})
@@ -144,7 +145,7 @@ class PwxInputGenerator(DftInputGenerator):
         return '\n'.join(lines)
 
     @property
-    def cell_parameters_as_str(self):
+    def cell_parameters_card(self):
         if self.crystal_structure is None:
             return
         lines = ['CELL_PARAMETERS {angstrom}']
@@ -153,25 +154,25 @@ class PwxInputGenerator(DftInputGenerator):
         return '\n'.join(lines)
 
     @property
-    def occupations_as_str(self):
+    def occupations_card(self):
         raise NotImplementedError
 
     @property
-    def constraints_as_str(self):
+    def constraints_card(self):
         raise NotImplementedError
 
     @property
-    def atomic_forces_as_str(self):
+    def atomic_forces_card(self):
         raise NotImplementedError
 
     @property
-    def cards_as_str(self):
+    def all_cards_as_str(self):
         blocks = []
         for card in QE_TAGS['pw.x']['cards']:
             if card in self.calculation_settings.get('cards', []):
-                blocks.append(getattr(self, '{}_as_str'.format(card)))
+                blocks.append(getattr(self, '{}_card'.format(card)))
         return '\n'.join(blocks)
 
     @property
     def pwinput_as_str(self):
-        return '\n'.join([self.namelists_as_str, self.cards_as_str])
+        return '\n'.join([self.all_namelists_as_str, self.all_cards_as_str])
