@@ -3,6 +3,7 @@
     "verbosity": "high",
     "tstress": true,
     "tprnfor": true,
+    "pseudo_dir": "./",
     "ibrav": 0,
     "nat": 1,
     "celldm(1)": 1.0,
