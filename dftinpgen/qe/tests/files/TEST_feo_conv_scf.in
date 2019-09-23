@@ -1,0 +1,34 @@
+&CONTROL
+    calculation = "scf"
+    verbosity = "high"
+    tstress = .true.
+    tprnfor = .true.
+    pseudo_dir = "./"
+/
+&SYSTEM
+    ibrav = 0
+    nat = 1
+    ntyp = 1
+    ecutwfc = 40
+    ecutrho = 240
+    occupations = "smearing"
+    degauss = 0.02
+    smearing = "m-v"
+/
+&ELECTRONS
+    mixing_beta = 0.5
+/
+ATOMIC_SPECIES
+Fe     55.84500000  PSPwoooo
+O      15.99940000  PSPwoooo
+ATOMIC_POSITIONS {crystal}
+Fe      0.00000000    0.00000000    0.00000000
+Fe      0.50000000    0.50000000    0.50000000
+O       0.25000000    0.25000000    0.25000000
+O       0.75000000    0.75000000    0.75000000
+K_POINTS {automatic}
+7 7 7 0 0 0
+CELL_PARAMETERS {angstrom}
+  0.00000000    4.09500000    4.09500000
+  4.09500000    0.00000000    4.09500000
+  4.09500000    4.09500000    0.00000000
