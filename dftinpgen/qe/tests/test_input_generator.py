@@ -57,8 +57,13 @@ class TestPwxInputGenerator(unittest.TestCase):
         namelists = ''.join(scf_in[:20]).rstrip('\n')
         self.assertEqual(pig.all_namelists_as_str, namelists)
 
+    def test_get_psp_name(self):
+        # TODO: test non-default pseudopotential choices
+        pig = PwxInputGenerator(crystal_structure=self.al_fcc_conv)
+        self.assertEqual(pig.get_psp_name('Fe-34'),
+                         'fe_pbe_v1.5.uspp.F.UPF')
+
     def test_atomic_species_card(self):
-        # TODO: pseudopotential settings (AUTOLOAD)
         pig = PwxInputGenerator(crystal_structure=self.feo_conv)
         with open(self.test_feo_conv_scf_in, 'r') as fr:
             scf_in = fr.readlines()
