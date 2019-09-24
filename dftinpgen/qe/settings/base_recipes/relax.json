@@ -19,7 +19,8 @@
         "spacing": 0.2,
         "shift": [0, 0, 0]
     },
-    "pseudo_set": "gbrv",
+    "pseudo_repo_dir": "~/pseudos/qe",
+    "pseudo_set": "citrine-ht",
     "hubbard_set": "wang",
     "namelists": ["control", "system", "electrons", "ions"],
     "cards": ["atomic_species", "atomic_positions", "kpoints", "cell_parameters"]
