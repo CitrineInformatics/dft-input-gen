@@ -19,8 +19,8 @@
     mixing_beta = 0.5
 /
 ATOMIC_SPECIES
-Fe     55.84500000  PSPwoooo
-O      15.99940000  PSPwoooo
+Fe     55.84500000  fe_pbe_v1.5.uspp.F.UPF
+O      15.99940000  o_pbe_v1.2.uspp.F.UPF
 ATOMIC_POSITIONS {crystal}
 Fe      0.00000000    0.00000000    0.00000000
 Fe      0.50000000    0.50000000    0.50000000

@@ -19,7 +19,7 @@
     mixing_beta = 0.5
 /
 ATOMIC_SPECIES
-Al     26.98153850  Al.pz-vbc.UPF
+Al     26.98153850  al_pbe_v1.uspp.F.UPF
 ATOMIC_POSITIONS {crystal}
 Al      0.00000000    0.00000000    0.00000000
 Al      0.00000000    0.50000000    0.50000000
