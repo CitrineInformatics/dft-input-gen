@@ -1,8 +1,11 @@
+import os
+import glob
 import json
 import six
 
 from dftinpgen.data import STANDARD_ATOMIC_WEIGHTS
 from dftinpgen.base import DftInputGenerator
+from dftinpgen.utils import get_elem_symbol
 from dftinpgen.qe.settings import QE_TAGS
 from dftinpgen.qe.settings.base_recipes import QE_BASE_RECIPES
 
@@ -99,17 +102,32 @@ class PwxInputGenerator(DftInputGenerator):
                 blocks.append(self.namelist_to_str(namelist))
         return '\n'.join(blocks)
 
+    def get_psp_name(self, species):
+        psp_dir = os.path.join(
+            os.path.expanduser(self.calculation_settings['pseudo_repo_dir']),
+            self.calculation_settings['pseudo_set'])
+        elem_low = get_elem_symbol(species).lower()
+        if os.path.isdir(psp_dir):
+            psp = glob.glob(os.path.join(psp_dir, '*'))
+            psp = [os.path.basename(p) for p in psp]
+            psp = [p for p in psp if
+                   p.partition('.')[0].partition('_')[0].lower() == elem_low]
+            if psp:
+                return psp[0]
+        msg = 'Pseudopotential not found for {}'.format(species)
+        raise PwInputGeneratorError(msg)
+
     @property
     def atomic_species_card(self):
         if self.crystal_structure is None:
             return
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         lines = ['ATOMIC_SPECIES']
-        for spec in species:
+        for sp in species:
             lines.append('{:4s}  {:12.8f}  {}'.format(
-                spec,
-                STANDARD_ATOMIC_WEIGHTS[spec]['standard_atomic_weight'],
-                'PSPwoooo'
+                sp,
+                STANDARD_ATOMIC_WEIGHTS[sp]['standard_atomic_weight'],
+                self.get_psp_name(sp)
             ))
         return '\n'.join(lines)
 

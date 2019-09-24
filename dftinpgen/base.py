@@ -1,7 +1,6 @@
 import six
 
 import numpy as np
-
 import ase
 from ase import io
 
