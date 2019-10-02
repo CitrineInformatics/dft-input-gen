@@ -20,7 +20,7 @@ def qe_val_formatter(val):
         return str(val)
 
 
-class PwInputGeneratorError(Exception):
+class PwxInputGeneratorError(Exception):
     pass
 
 
@@ -28,8 +28,8 @@ class PwxInputGenerator(DftInputGenerator):
     """Base class to generate input files for pw.x."""
 
     def __init__(self, crystal_structure=None, base_recipe=None,
-                 custom_sett_file=None, write_location=None,
-                 overwrite_files=None, **kwargs):
+                 custom_sett_file=None, custom_sett_dict=None,
+                 write_location=None, overwrite_files=None, **kwargs):
         """
         Constructor.
 
@@ -47,14 +47,18 @@ class PwxInputGenerator(DftInputGenerator):
             Pre-defined recipes are in
             [INSTALL_PATH]/qe/settings/base_recipes/
 
-            Defaults to the "scf" recipe.
-
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
             dictionary of tags and values.
 
-            NB: Custom settings specified here always OVERWRITE those in
+            NB: Custom settings specified here always OVERRIDE those in
             `base_recipe` in case of overlap.
+
+        custom_sett_dict: dict, optional
+            Dictionary with custom calculation settings as tags and values/
+
+            NB: Custom settings specified here always OVERRIDE those in
+            `base_recipe` and `custom_sett_file`.
 
         write_location: str, optional
             Path to the directory in which to write the input files.
@@ -72,9 +76,44 @@ class PwxInputGenerator(DftInputGenerator):
             dft_package='qe',
             base_recipe=base_recipe,
             custom_sett_file=custom_sett_file,
+            custom_sett_dict=custom_sett_dict,
             write_location=write_location,
             overwrite_files=overwrite_files,
             **kwargs)
+        self.set_pseudopotentials()
+
+    def set_pseudopotentials(self):
+        """Helper function to set the pseudopotential for each species."""
+        if self.crystal_structure is None:
+            return
+        if self.custom_sett_dict is None:
+            self.custom_sett_dict = {}
+        psp_dir = os.path.join(
+            os.path.expanduser(self.calculation_settings['pseudo_repo_dir']),
+            self.calculation_settings['pseudo_set'])
+        if not os.path.isdir(psp_dir):
+            msg = 'Pseudopotentials directory "{}" not found'.format(psp_dir)
+            raise PwxInputGeneratorError(msg)
+        self.custom_sett_dict['pseudo_dir'] = psp_dir
+        species = sorted(set(self.crystal_structure.get_chemical_symbols()))
+        if 'psp_names' not in self.custom_sett_dict:
+            self.custom_sett_dict['psp_names'] = {}
+        for sp in species:
+            self.custom_sett_dict['psp_names'].update({
+                sp: self.get_psp_name(sp, psp_dir)
+            })
+
+    @staticmethod
+    def get_psp_name(species, psp_dir):
+        elem_low = get_elem_symbol(species).lower()
+        psp = glob.glob(os.path.join(psp_dir, '*'))
+        psp = [os.path.basename(p) for p in psp]
+        psp = [p for p in psp if
+               p.partition('.')[0].partition('_')[0].lower() == elem_low]
+        if psp:
+            return psp[0]
+        msg = 'Pseudopotential not found for {}'.format(species)
+        raise PwxInputGeneratorError(msg)
 
     @property
     def calculation_settings(self):
@@ -82,6 +121,8 @@ class PwxInputGenerator(DftInputGenerator):
         if self.custom_sett_file is not None:
             with open(self.custom_sett_file, 'r') as fr:
                 calc_sett.update(json.load(fr))
+        if self.custom_sett_dict is not None:
+            calc_sett.update(self.custom_sett_dict)
         return calc_sett
 
     def namelist_to_str(self, namelist):
@@ -102,21 +143,6 @@ class PwxInputGenerator(DftInputGenerator):
                 blocks.append(self.namelist_to_str(namelist))
         return '\n'.join(blocks)
 
-    def get_psp_name(self, species):
-        psp_dir = os.path.join(
-            os.path.expanduser(self.calculation_settings['pseudo_repo_dir']),
-            self.calculation_settings['pseudo_set'])
-        elem_low = get_elem_symbol(species).lower()
-        if os.path.isdir(psp_dir):
-            psp = glob.glob(os.path.join(psp_dir, '*'))
-            psp = [os.path.basename(p) for p in psp]
-            psp = [p for p in psp if
-                   p.partition('.')[0].partition('_')[0].lower() == elem_low]
-            if psp:
-                return psp[0]
-        msg = 'Pseudopotential not found for {}'.format(species)
-        raise PwInputGeneratorError(msg)
-
     @property
     def atomic_species_card(self):
         if self.crystal_structure is None:
@@ -127,7 +153,7 @@ class PwxInputGenerator(DftInputGenerator):
             lines.append('{:4s}  {:12.8f}  {}'.format(
                 sp,
                 STANDARD_ATOMIC_WEIGHTS[sp]['standard_atomic_weight'],
-                self.get_psp_name(sp)
+                self.custom_sett_dict['psp_names'][sp]
             ))
         return '\n'.join(lines)
 
@@ -194,3 +220,11 @@ class PwxInputGenerator(DftInputGenerator):
     @property
     def pwinput_as_str(self):
         return '\n'.join([self.all_namelists_as_str, self.all_cards_as_str])
+
+    def write_pwxinput(self, write_location=None, filename=None):
+        if write_location is None:
+            write_location = self.write_location
+        if filename is None:
+            filename = '{}.in'.format(self.base_recipe)
+        with open(os.path.join(write_location, filename), 'w') as fw:
+            fw.write(self.pwinput_as_str)
