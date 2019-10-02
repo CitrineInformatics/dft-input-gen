@@ -1,3 +1,4 @@
+import os
 import six
 
 import numpy as np
@@ -14,7 +15,8 @@ class DftInputGenerator(object):
     """Base class to generate input files for a DFT calculation."""
 
     def __init__(self, crystal_structure=None, dft_package=None,
-                 base_recipe=None, custom_sett_file=None, write_location=None,
+                 base_recipe=None, custom_sett_file=None,
+                 custom_sett_dict=None, write_location=None,
                  overwrite_files=None, **kwargs):
         """
         Constructor.
@@ -30,8 +32,6 @@ class DftInputGenerator(object):
             Name of the DFT package to use for the calculation. Currently
             available options are "qe" and "vasp" (case-insensitive).
 
-            Defaults to "qe".
-
         base_recipe: str, optional
             The "base" calculation settings to use--must be one of the
             pre-defined recipes provided for the specified `dft_package`.
@@ -43,18 +43,23 @@ class DftInputGenerator(object):
             settings in "dftinpgen/vasp/settings/base_recipes/scf.json" are
             used.
 
-            Defaults to the pre-defined "scf" settings (corresponding to the
-            specified `dft_package`).
-
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
             dictionary of tags and values.
 
-            NB: Custom settings specified here always OVERWRITE those in
+            NB: Custom settings specified here always OVERRIDE those in
             `base_recipe` in case of overlap.
+
+        custom_sett_dict: dict, optional
+            Dictionary with custom calculation settings as tags and values.
+
+            NB: Custom settings specified here always OVERRIDE those in
+            `base_recipe` and `custom_sett_file`.
 
         write_location: str, optional
             Path to the directory in which to write the input files.
+
+            Defaults to the current working directory.
 
         overwrite_files: bool, optional
             To overwrite files or not, that is the question.
@@ -68,14 +73,17 @@ class DftInputGenerator(object):
         self._crystal_structure = None
         self._read_crystal_structure(crystal_structure, **kwargs)
 
-        self._dft_package = 'qe'
+        self._dft_package = None
         self.dft_package = dft_package
 
-        self._base_recipe = 'scf'
+        self._base_recipe = None
         self.base_recipe = base_recipe
 
         self._custom_sett_file = None
         self.custom_sett_file = custom_sett_file
+
+        self._custom_sett_dict = None
+        self.custom_sett_dict = custom_sett_dict
 
         self._write_location = None
         self.write_location = write_location
@@ -126,8 +134,15 @@ class DftInputGenerator(object):
 
     @custom_sett_file.setter
     def custom_sett_file(self, custom_sett_file):
-        if custom_sett_file is not None:
-            self._custom_sett_file = custom_sett_file
+        self._custom_sett_file = custom_sett_file
+
+    @property
+    def custom_sett_dict(self):
+        return self._custom_sett_dict
+
+    @custom_sett_dict.setter
+    def custom_sett_dict(self, custom_sett_dict):
+        self._custom_sett_dict = custom_sett_dict
 
     @property
     def write_location(self):
@@ -135,7 +150,10 @@ class DftInputGenerator(object):
 
     @write_location.setter
     def write_location(self, write_location):
-        self._write_location = write_location
+        if write_location is not None:
+            self._write_location = write_location
+        else:
+            self._write_location = os.getcwd()
 
     @property
     def overwrite_files(self):
