@@ -2,7 +2,6 @@ import os
 
 from dftinpgen.data import *
 from dftinpgen.qe import *
-from dftinpgen.vasp import *
 
 
 # single-sourcing the package version
