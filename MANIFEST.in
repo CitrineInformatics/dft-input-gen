@@ -1,2 +1,3 @@
 include dftinpgen/data/*.json
-recursive-include *.json
+include dftinpgen/qe/settings/*.json
+include dftinpgen/qe/settings/base_recipes/*.json
