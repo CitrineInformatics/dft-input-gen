@@ -80,7 +80,20 @@ class PwxInputGenerator(DftInputGenerator):
             write_location=write_location,
             overwrite_files=overwrite_files,
             **kwargs)
+        self.set_params_from_structure()
         self.set_pseudopotentials()
+
+    def set_params_from_structure(self):
+        """Helper function to update some settings, e.g. number of atoms and the
+        number of types of species, based on the input crystal structure."""
+        if self.crystal_structure is None:
+            return
+        if self.custom_sett_dict is None:
+            self.custom_sett_dict = {}
+        self.custom_sett_dict.update({
+            'nat': len(self.crystal_structure),
+            'ntyp': len(set(self.crystal_structure.get_chemical_symbols()))
+        })
 
     def set_pseudopotentials(self):
         """Helper function to set the pseudopotential for each species."""
