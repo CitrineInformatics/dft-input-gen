@@ -1,2 +1,2 @@
 include dftinpgen/data/*.json
-include *.json
+recursive-include *.json
