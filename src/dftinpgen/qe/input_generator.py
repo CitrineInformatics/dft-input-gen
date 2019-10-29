@@ -88,26 +88,39 @@ class PwxInputGenerator(DftInputGenerator):
         number of types of species, based on the input crystal structure."""
         if self.crystal_structure is None:
             return
-        if self.custom_sett_dict is None:
-            self.custom_sett_dict = {}
         self.custom_sett_dict.update({
             'nat': len(self.crystal_structure),
             'ntyp': len(set(self.crystal_structure.get_chemical_symbols()))
         })
 
+    def get_pseudo_dir(self):
+        """Helper function to set the pseudopotential directory."""
+        if 'pseudo_dir' in self.calculation_settings:
+            return
+        if 'pseudo_repo_dir' not in self.calculation_settings:
+            return
+        if 'pseudo_set' not in self.calculation_settings:
+            return
+        psp_dir = os.path.join(
+            os.path.expanduser(self.calculation_settings['pseudo_repo_dir']),
+            self.calculation_settings['pseudo_set'])
+        return psp_dir
+
     def set_pseudopotentials(self):
         """Helper function to set the pseudopotential for each species."""
         if self.crystal_structure is None:
             return
-        if self.custom_sett_dict is None:
-            self.custom_sett_dict = {}
-        psp_dir = os.path.join(
-            os.path.expanduser(self.calculation_settings['pseudo_repo_dir']),
-            self.calculation_settings['pseudo_set'])
-        if not os.path.isdir(psp_dir):
+        # get the pseudopotentials directory
+        psp_dir = self.get_pseudo_dir()
+        if psp_dir is None:
+            return
+        elif not os.path.isdir(psp_dir):
             msg = 'Pseudopotentials directory "{}" not found'.format(psp_dir)
             raise PwxInputGeneratorError(msg)
-        self.custom_sett_dict['pseudo_dir'] = psp_dir
+        # unless `pseudo_dir` is user-specified, add it to custom settings
+        if 'pseudo_dir' not in self.calculation_settings:
+            self.custom_sett_dict.update({'pseudo_dir': psp_dir})
+        # read in pseudopotentials for each elemental species
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         if 'psp_names' not in self.custom_sett_dict:
             self.custom_sett_dict['psp_names'] = {}
@@ -130,7 +143,9 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def calculation_settings(self):
-        calc_sett = QE_BASE_RECIPES[self.base_recipe]
+        calc_sett = {}
+        if self.base_recipe is not None:
+            calc_sett.update(QE_BASE_RECIPES[self.base_recipe])
         if self.custom_sett_file is not None:
             with open(self.custom_sett_file, 'r') as fr:
                 calc_sett.update(json.load(fr))
@@ -166,7 +181,7 @@ class PwxInputGenerator(DftInputGenerator):
             lines.append('{:4s}  {:12.8f}  {}'.format(
                 sp,
                 STANDARD_ATOMIC_WEIGHTS[sp]['standard_atomic_weight'],
-                self.custom_sett_dict['psp_names'][sp]
+                self.custom_sett_dict.get('psp_names', {}).get(sp, None)
             ))
         return '\n'.join(lines)
 
