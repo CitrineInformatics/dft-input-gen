@@ -30,8 +30,9 @@ def test_crystal_structure_file_input():
     assert dig.dft_package == 'test-dft'
     assert dig.base_recipe == 'test-recipe'
     assert dig.custom_sett_file is None
-    assert dig.custom_sett_dict is None
+    assert not dig.custom_sett_dict
     assert dig.write_location == os.getcwd()
+    assert dig.overwrite_files
 
 
 def test_crystal_structure_input_type_error():
