@@ -2,8 +2,7 @@ import os
 from setuptools import setup, find_packages
 
 
-with open(os.path.join(os.path.dirname(__file__),
-                       'dftinpgen', 'VERSION.txt')) as fr:
+with open(os.path.join(os.path.dirname(__file__), 'VERSION.txt')) as fr:
     version = fr.read().strip()
 
 
@@ -12,7 +11,8 @@ setup(
     version=version,
     description='Unopinionated library to generate input files for DFT codes',
     url='https://github.com/CitrineInformatics/dft-input-gen',
-    packages=find_packages(exclude=['docs']),
+    packages=find_packages(where='src', exclude=['docs']),
+    package_dir={'': 'src'},
     install_requires=[
         'six',
         'numpy',
@@ -20,4 +20,3 @@ setup(
     ],
     include_package_data=True,
 )
-

@@ -51,10 +51,13 @@ class TestPwxInputGenerator(unittest.TestCase):
         self.assertEqual(pig.namelist_to_str('electrons'), electrons)
 
     def test_all_namelists_as_str(self):
-        pig = PwxInputGenerator(crystal_structure=self.al_fcc_conv)
+        pig = PwxInputGenerator(crystal_structure=self.al_fcc_conv,
+                                custom_sett_dict={'pseudo_dir': './'})
+        pseudo_dir = os.path.expanduser('~/pseudo/qe/citrine-ht')
         with open(self.test_al_fcc_conv_scf_in, 'r') as fr:
             scf_in = fr.readlines()
         namelists = ''.join(scf_in[:20]).rstrip('\n')
+        print(namelists)
         self.assertEqual(pig.all_namelists_as_str, namelists)
 
     def test_get_psp_name(self):

@@ -3,7 +3,7 @@
     verbosity = "high"
     tstress = .true.
     tprnfor = .true.
-    pseudo_dir = "./"
+    pseudo_dir = "{pseudo_dir}"
 /
 &SYSTEM
     ibrav = 0
@@ -20,14 +20,14 @@
 /
 ATOMIC_SPECIES
 Al     26.98153850  al_pbe_v1.uspp.F.UPF
-ATOMIC_POSITIONS {crystal}
+ATOMIC_POSITIONS {{crystal}}
 Al      0.00000000    0.00000000    0.00000000
 Al      0.00000000    0.50000000    0.50000000
 Al      0.50000000    0.50000000    0.00000000
 Al      0.50000000    0.00000000    0.50000000
-K_POINTS {automatic}
+K_POINTS {{automatic}}
 8 8 8 0 0 0
-CELL_PARAMETERS {angstrom}
+CELL_PARAMETERS {{angstrom}}
  -2.85690000   -1.64943198    2.33264908
   0.00000000   -3.29886397   -2.33264908
   2.85690000   -1.64943198    2.33264908

@@ -43,6 +43,8 @@ class DftInputGenerator(object):
             settings in "dftinpgen/vasp/settings/base_recipes/scf.json" are
             used.
 
+            Defaults to "scf".
+
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
             dictionary of tags and values.
@@ -76,7 +78,7 @@ class DftInputGenerator(object):
         self._dft_package = None
         self.dft_package = dft_package
 
-        self._base_recipe = None
+        self._base_recipe = 'scf'
         self.base_recipe = base_recipe
 
         self._custom_sett_file = None
