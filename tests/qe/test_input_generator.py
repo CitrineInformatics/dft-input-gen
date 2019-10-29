@@ -16,17 +16,27 @@ def eg_struct():
 
 @pytest.fixture
 def eg_pwx_in():
-    pseudo_dir = os.path.expanduser('~/pseudos/qe/citrine-ht')
 
-    def _eg_pwx_in(fname):
+    def _eg_pwx_in(fname, pseudo_dir=None):
+        if pseudo_dir is None:
+            pseudo_dir = os.path.expanduser('~/pseudos/qe/citrine-ht')
         fpath = os.path.join(os.path.dirname(__file__), 'files', fname)
         with open(fpath, 'r') as fr:
             return fr.read().format(pseudo_dir=pseudo_dir)
     return _eg_pwx_in
 
 
+def test_bare_base_calculation_settings(eg_struct):
+    pig = PwxInputGenerator()
+    assert 'pseudo_dir' not in pig.calculation_settings
+    pig = PwxInputGenerator(
+        crystal_structure=eg_struct('al_fcc_conv.vasp'))
+    assert 'pseudo_dir' not in pig.calculation_settings
+
+
 def test_scf_base_calculation_settings(eg_struct):
-    pig = PwxInputGenerator(crystal_structure=eg_struct('al_fcc_conv.vasp'))
+    pig = PwxInputGenerator(crystal_structure=eg_struct('al_fcc_conv.vasp'),
+                            base_recipe='scf')
     cs = pig.calculation_settings
     assert cs['calculation'] == 'scf'
     assert cs['namelists'] == ['control', 'system', 'electrons']
@@ -50,7 +60,8 @@ def test_qe_val_formatter():
 
 
 def test_namelist_to_str(eg_struct, eg_pwx_in):
-    pig = PwxInputGenerator(crystal_structure=eg_struct('al_fcc_conv.vasp'))
+    pig = PwxInputGenerator(crystal_structure=eg_struct('al_fcc_conv.vasp'),
+                            base_recipe='scf')
     scf_in = eg_pwx_in('TEST_al_fcc_conv_scf.in')
     control = '\n'.join(scf_in.splitlines()[:7])
     assert pig.namelist_to_str('control') == control
@@ -60,8 +71,9 @@ def test_namelist_to_str(eg_struct, eg_pwx_in):
 
 def test_all_namelists_as_str(eg_struct, eg_pwx_in):
     pig = PwxInputGenerator(crystal_structure=eg_struct('al_fcc_conv.vasp'),
+                            base_recipe='scf',
                             custom_sett_dict={'pseudo_dir': './'})
-    scf_in = eg_pwx_in('TEST_al_fcc_conv_scf.in')
+    scf_in = eg_pwx_in('TEST_al_fcc_conv_scf.in', pseudo_dir='./')
     namelists = '\n'.join(scf_in.splitlines()[:20])
     assert pig.all_namelists_as_str == namelists
 
@@ -72,29 +84,40 @@ def test_get_psp_name():
         'fe_pbe_v1.5.uspp.F.UPF'
 
 
-def test_atomic_species_card(eg_struct, eg_pwx_in):
+def test_atomic_species_card_wo_psp(eg_struct):
     pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'))
+    ref_line = 'O      15.99940000  None'
+    assert pig.atomic_species_card.splitlines()[-1] == ref_line
+
+
+def test_atomic_species_card(eg_struct, eg_pwx_in):
+    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'),
+                            base_recipe='scf')
     scf_in = eg_pwx_in('TEST_feo_conv_scf.in')
     card = '\n'.join(scf_in.splitlines()[20:23])
     assert pig.atomic_species_card == card
 
 
 def test_atomic_positions_card(eg_struct, eg_pwx_in):
-    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'))
+    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'),
+                            base_recipe='scf')
     scf_in = eg_pwx_in('TEST_feo_conv_scf.in')
     card = '\n'.join(scf_in.splitlines()[23:28])
     assert pig.atomic_positions_card == card
 
 
 def test_kpoints_card(eg_struct):
-    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'))
+    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'),
+                            base_recipe='scf')
     assert pig.kpoints_card == 'K_POINTS {automatic}\n7 7 7 0 0 0'
-    pig = PwxInputGenerator(crystal_structure=eg_struct('al_fcc_conv.vasp'))
+    pig = PwxInputGenerator(crystal_structure=eg_struct('al_fcc_conv.vasp'),
+                            base_recipe='scf')
     assert pig.kpoints_card == 'K_POINTS {automatic}\n8 8 8 0 0 0'
 
 
 def test_cell_parameters_card(eg_struct, eg_pwx_in):
-    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'))
+    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'),
+                            base_recipe='scf')
     scf_in = eg_pwx_in('TEST_feo_conv_scf.in')
     card = '\n'.join(scf_in.splitlines()[30:])
     assert pig.cell_parameters_card == card
@@ -119,13 +142,15 @@ def test_atomic_forces_card(eg_struct):
 
 
 def test_all_cards_as_str(eg_struct, eg_pwx_in):
-    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'))
+    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'),
+                            base_recipe='scf')
     scf_in = eg_pwx_in('TEST_feo_conv_scf.in')
     all_cards = '\n'.join(scf_in.splitlines()[20:])
     assert pig.all_cards_as_str == all_cards
 
 
 def test_pwinput_as_str(eg_struct, eg_pwx_in):
-    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'))
+    pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'),
+                            base_recipe='scf')
     scf_in = eg_pwx_in('TEST_feo_conv_scf.in')
     assert pig.pwinput_as_str == scf_in.rstrip('\n')
