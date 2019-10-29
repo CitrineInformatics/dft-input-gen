@@ -43,8 +43,6 @@ class DftInputGenerator(object):
             settings in "dftinpgen/vasp/settings/base_recipes/scf.json" are
             used.
 
-            Defaults to "scf".
-
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
             dictionary of tags and values.
@@ -58,13 +56,17 @@ class DftInputGenerator(object):
             NB: Custom settings specified here always OVERRIDE those in
             `base_recipe` and `custom_sett_file`.
 
+            Default: {}
+
         write_location: str, optional
             Path to the directory in which to write the input files.
 
-            Defaults to the current working directory.
+            Default: current working directory.
 
         overwrite_files: bool, optional
             To overwrite files or not, that is the question.
+
+            Default: True
 
         **kwargs:
             Arbitrary keyword arguments, e.g. to pass on to the crystal
@@ -78,19 +80,19 @@ class DftInputGenerator(object):
         self._dft_package = None
         self.dft_package = dft_package
 
-        self._base_recipe = 'scf'
+        self._base_recipe = None
         self.base_recipe = base_recipe
 
         self._custom_sett_file = None
         self.custom_sett_file = custom_sett_file
 
-        self._custom_sett_dict = None
+        self._custom_sett_dict = {}
         self.custom_sett_dict = custom_sett_dict
 
-        self._write_location = None
+        self._write_location = os.getcwd()
         self.write_location = write_location
 
-        self._overwrite_files = None
+        self._overwrite_files = True
         self.overwrite_files = overwrite_files
 
     @property
@@ -144,7 +146,8 @@ class DftInputGenerator(object):
 
     @custom_sett_dict.setter
     def custom_sett_dict(self, custom_sett_dict):
-        self._custom_sett_dict = custom_sett_dict
+        if custom_sett_dict is not None:
+            self._custom_sett_dict = custom_sett_dict
 
     @property
     def write_location(self):
@@ -154,8 +157,6 @@ class DftInputGenerator(object):
     def write_location(self, write_location):
         if write_location is not None:
             self._write_location = write_location
-        else:
-            self._write_location = os.getcwd()
 
     @property
     def overwrite_files(self):
@@ -163,7 +164,8 @@ class DftInputGenerator(object):
 
     @overwrite_files.setter
     def overwrite_files(self, overwrite_files):
-        self._overwrite_files = overwrite_files
+        if overwrite_files is not None:
+            self._overwrite_files = overwrite_files
 
     def get_kpoint_grid_from_spacing(self, spacing):
         if not self.crystal_structure:
