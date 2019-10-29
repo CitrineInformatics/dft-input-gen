@@ -3,6 +3,9 @@ import glob
 import json
 
 
+__all__ = ['QE_BASE_RECIPES']
+
+
 recipe_jsons = glob.glob(os.path.join(os.path.dirname(__file__), '*.json'))
 
 QE_BASE_RECIPES = {}
