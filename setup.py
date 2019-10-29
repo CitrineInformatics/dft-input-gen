@@ -2,7 +2,8 @@ import os
 from setuptools import setup, find_packages
 
 
-with open(os.path.join(os.path.dirname(__file__), 'VERSION.txt')) as fr:
+with open(os.path.join(os.path.dirname(__file__),
+                       'src', 'dftinpgen', 'VERSION.txt')) as fr:
     version = fr.read().strip()
 
 
