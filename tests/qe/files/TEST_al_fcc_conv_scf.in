@@ -7,7 +7,7 @@
 /
 &SYSTEM
     ibrav = 0
-    nat = 1
+    nat = 4
     ntyp = 1
     ecutwfc = 40
     ecutrho = 240

@@ -3,12 +3,12 @@
     verbosity = "high"
     tstress = .true.
     tprnfor = .true.
-    pseudo_dir = "./"
+    pseudo_dir = "{pseudo_dir}"
 /
 &SYSTEM
     ibrav = 0
-    nat = 1
-    ntyp = 1
+    nat = 4
+    ntyp = 2
     ecutwfc = 40
     ecutrho = 240
     occupations = "smearing"
@@ -21,14 +21,14 @@
 ATOMIC_SPECIES
 Fe     55.84500000  fe_pbe_v1.5.uspp.F.UPF
 O      15.99940000  o_pbe_v1.2.uspp.F.UPF
-ATOMIC_POSITIONS {crystal}
+ATOMIC_POSITIONS {{crystal}}
 Fe      0.00000000    0.00000000    0.00000000
 Fe      0.50000000    0.50000000    0.50000000
 O       0.25000000    0.25000000    0.25000000
 O       0.75000000    0.75000000    0.75000000
-K_POINTS {automatic}
+K_POINTS {{automatic}}
 7 7 7 0 0 0
-CELL_PARAMETERS {angstrom}
+CELL_PARAMETERS {{angstrom}}
   0.00000000    4.09500000    4.09500000
   4.09500000    0.00000000    4.09500000
   4.09500000    4.09500000    0.00000000
