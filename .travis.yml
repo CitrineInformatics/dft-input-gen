@@ -13,7 +13,7 @@ install:
     - export PATH="$HOME/miniconda3/bin:$PATH"
     - conda update --yes -n base conda
     - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION pytest
-    - conda activate testenv
+    - source activate testenv
     - pip install -e .
 
 script:
