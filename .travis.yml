@@ -2,9 +2,8 @@ language: python
 
 python:
     - 2.7
+    - 3.5
     - 3.6
-    - 3.7
-    - 3.8
 
 install:
     - sudo apt-get update
@@ -14,6 +13,8 @@ install:
     - conda update --yes -n base conda
     - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION pytest
     - source activate testenv
+    - pip install -r requirements.txt
+    - pip install -r test_requirements.txt
     - pip install -e .
 
 script:
