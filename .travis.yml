@@ -2,16 +2,17 @@ language: python
 
 python:
     - 2.7
-    - 3.5
     - 3.6
+    - 3.7
+    - 3.8
 
 install:
     - sudo apt-get update
     - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
     - bash miniconda.sh -b
     - export PATH="$HOME/miniconda3/bin:$PATH"
-    - conda update -n base conda --yes
-    - conda create -n testenv python=$TRAVIS_PYTHON_VERSION pytest --yes
+    - conda update --yes -n base conda
+    - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION pytest
     - conda activate testenv
     - pip install -e .
 
