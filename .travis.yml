@@ -15,5 +15,6 @@ install:
     - conda activate test-env
     - pip install -e .
 
-script: py.test -s
+script:
+    - pytest --flake8 --cov=src/ --cov-report term-missing --cov-report term:skip-covered -s -r .
 
