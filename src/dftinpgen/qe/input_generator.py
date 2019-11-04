@@ -33,8 +33,8 @@ class PwxInputGenerator(DftInputGenerator):
         """
         Constructor.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
 
         crystal_structure: str or :class:`ase.Atoms` object
             Path to the file with the input crystal structure or an
@@ -61,7 +61,7 @@ class PwxInputGenerator(DftInputGenerator):
             `base_recipe` and `custom_sett_file`.
 
         write_location: str, optional
-            Path to the directory in which to write the input files.
+            Path to the directory in which to write the input file(s).
 
         overwrite_files: bool, optional
             To overwrite files or not, that is the question.
@@ -88,6 +88,7 @@ class PwxInputGenerator(DftInputGenerator):
         number of types of species, based on the input crystal structure."""
         if self.crystal_structure is None:
             return
+        print('Setting custom input parameters based on crystal structure')
         self.custom_sett_dict.update({
             'nat': len(self.crystal_structure),
             'ntyp': len(set(self.crystal_structure.get_chemical_symbols()))
@@ -120,6 +121,7 @@ class PwxInputGenerator(DftInputGenerator):
         # unless `pseudo_dir` is user-specified, add it to custom settings
         if 'pseudo_dir' not in self.calculation_settings:
             self.custom_sett_dict.update({'pseudo_dir': psp_dir})
+        print('Pseudopotentials directory set to {}'.format(psp_dir))
         # read in pseudopotentials for each elemental species
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         if 'psp_names' not in self.custom_sett_dict:
@@ -128,6 +130,7 @@ class PwxInputGenerator(DftInputGenerator):
             self.custom_sett_dict['psp_names'].update({
                 sp: self.get_psp_name(sp, psp_dir)
             })
+        print('Pseudopotentials set for all elemental species')
 
     @staticmethod
     def get_psp_name(species, psp_dir):
@@ -165,6 +168,8 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def all_namelists_as_str(self):
+        if self.crystal_structure is None:
+            return
         blocks = []
         for namelist in QE_TAGS['pw.x']['namelists']:
             if namelist in self.calculation_settings.get('namelists', []):
@@ -239,6 +244,8 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def all_cards_as_str(self):
+        if self.crystal_structure is None:
+            return
         blocks = []
         for card in QE_TAGS['pw.x']['cards']:
             if card in self.calculation_settings.get('cards', []):
@@ -247,12 +254,21 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def pwinput_as_str(self):
+        if self.crystal_structure is None:
+            return
         return '\n'.join([self.all_namelists_as_str, self.all_cards_as_str])
 
-    def write_pwxinput(self, write_location=None, filename=None):
+    def write_pwinput(self, write_location=None, filename=None):
+        if self.crystal_structure is None:
+            msg = 'Crystal structure not specified'
+            raise PwxInputGeneratorError(msg)
+        if not self.pwinput_as_str.strip():
+            msg = 'Nothing to write (probably no input settings found.)'
+            raise PwxInputGeneratorError(msg)
         if write_location is None:
             write_location = self.write_location
         if filename is None:
-            filename = '{}.in'.format(self.base_recipe)
+            filename = '{}.in'.format(self.base_recipe) \
+                if self.base_recipe is not None else 'pw.in'
         with open(os.path.join(write_location, filename), 'w') as fw:
             fw.write(self.pwinput_as_str)

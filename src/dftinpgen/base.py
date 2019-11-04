@@ -169,7 +169,7 @@ class DftInputGenerator(object):
 
     def get_kpoint_grid_from_spacing(self, spacing):
         if not self.crystal_structure:
-            msg = 'Crystal structure not found'
+            msg = 'Crystal structure not specified'
             raise DftInputGeneratorError(msg)
         rcell = 2*np.pi*(np.linalg.inv(self.crystal_structure.cell).T)
         return list(map(int, np.ceil(np.linalg.norm(rcell, axis=1)/spacing)))
