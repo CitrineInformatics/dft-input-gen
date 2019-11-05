@@ -1,13 +1,18 @@
 # dftinpgen
 
+[![Build Status](https://travis-ci.com/CitrineInformatics/dft-input-gen.svg?token=qbMA4N9P9kHgFLrLQ51g&branch=master)](https://travis-ci.com/CitrineInformatics/dft-input-gen)
+
 Unopinionated input file generator for DFT codes.
 
 
 ## DFT codes supported
 
-1. PWscf (`pw.x`) from the Quantum Espresso package
-   (`https://www.quantum-espresso.org/Doc/pw_user_guide/`)
-
+1. [PWscf (pw.x)](`https://www.quantum-espresso.org/Doc/pw_user_guide/`) from
+   the Quantum Espresso package.
+2. [under development] Post-processing utilities for PWscf:
+   [(dos.x)](https://www.quantum-espresso.org/Doc/INPUT_DOS.html),
+   [(bands.x)](https://www.quantum-espresso.org/Doc/INPUT_BANDS.html),
+   [(projwfc.x)](https://www.quantum-espresso.org/Doc/INPUT_PROJWFC.html)
 
 ## Installation
 
@@ -17,7 +22,7 @@ Unopinionated input file generator for DFT codes.
 git clone git@github.com:CitrineInformatics/dft-input-gen.git
 ```
 
-2. Install requirements (Python 2.7, >=3.5 are supported)
+2. Install Python requirements (Python versions 2.7, >=3.5 are supported)
 
 ```
 cd dft-input-gen
@@ -39,5 +44,5 @@ python setup.py install
 
 ## Documentation
 
-The documentation for this project is available here {insert link}.
+The documentation for this project is available in `docs/src`.
 

@@ -12,6 +12,8 @@ setup(
     version=version,
     description='Unopinionated library to generate input files for DFT codes',
     url='https://github.com/CitrineInformatics/dft-input-gen',
+    author='Vinay Hegde',
+    author_email='vhegde@citrine.io',
     packages=find_packages(where='src', exclude=['docs']),
     package_dir={'': 'src'},
     install_requires=[
