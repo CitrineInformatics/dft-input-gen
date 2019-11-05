@@ -1,6 +1,7 @@
 import os
 import json
 import six
+import itertools
 
 from dftinpgen.data import STANDARD_ATOMIC_WEIGHTS
 from dftinpgen.base import DftInputGenerator
@@ -238,7 +239,8 @@ class PwxInputGenerator(DftInputGenerator):
             if not grid:
                 grid = self.get_kpoint_grid_from_spacing(
                     kpoints_sett['spacing'])
-            lines.append('{} {} {} {} {} {}'.format(*grid, *shift))
+            _l = '{} {} {} {} {} {}'.format(*itertools.chain(grid, shift))
+            lines.append(_l)
         return '\n'.join(lines)
 
     @property
