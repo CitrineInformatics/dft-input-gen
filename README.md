@@ -7,12 +7,12 @@ Unopinionated input file generator for DFT codes.
 
 ## DFT codes supported
 
-1. [pw.x](https://www.quantum-espresso.org/Doc/INPUT_PW.html) from the Quantum
-   Espresso package.
-2. (under development) Post-processing utilities for PWscf:
-   [(dos.x)](https://www.quantum-espresso.org/Doc/INPUT_DOS.html),
-   [(bands.x)](https://www.quantum-espresso.org/Doc/INPUT_BANDS.html),
-   [(projwfc.x)](https://www.quantum-espresso.org/Doc/INPUT_PROJWFC.html)
+1. [pw.x](https://www.quantum-espresso.org/Doc/INPUT_PW.html) from the
+   [Quantum Espresso package](https://www.quantum-espresso.org/)
+2. (under development) Post-processing utilities for pw.x:
+   [dos.x](https://www.quantum-espresso.org/Doc/INPUT_DOS.html),
+   [bands.x](https://www.quantum-espresso.org/Doc/INPUT_BANDS.html),
+   [projwfc.x](https://www.quantum-espresso.org/Doc/INPUT_PROJWFC.html)
 
 ## Installation
 
