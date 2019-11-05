@@ -5,14 +5,11 @@
 Unopinionated input file generator for DFT codes.
 
 
-## DFT codes supported
+## Requirements
 
-1. [pw.x](https://www.quantum-espresso.org/Doc/INPUT_PW.html) from the
-   [Quantum Espresso package](https://www.quantum-espresso.org/)
-2. (under development) Post-processing utilities for pw.x:
-   [dos.x](https://www.quantum-espresso.org/Doc/INPUT_DOS.html),
-   [bands.x](https://www.quantum-espresso.org/Doc/INPUT_BANDS.html),
-   [projwfc.x](https://www.quantum-espresso.org/Doc/INPUT_PROJWFC.html)
+Python 2.7 or >=3.5, with dependencies listed in
+[requirements.txt](https://github.com/CitrineInformatics/dft-input-gen/blob/master/requirements.txt)
+
 
 ## Installation
 
@@ -43,7 +40,40 @@ pytest -sv
 ```
 
 
+## Usage
+
+For a standard `scf` calculation using `pw.x`:
+
+```
+from dftinpgen.qe.pwx import PwxInputGenerator
+pwig = PwxInputGenerator(crystal_structure="my_crystal_structure.cif",
+                         base_recipe="scf")
+print(pwig.pwx_input_as_str)
+```
+
+Further details, examples can be found in the package documentation.
+
+
+## DFT codes supported
+
+1. [pw.x](https://www.quantum-espresso.org/Doc/INPUT_PW.html) from the
+   [Quantum Espresso package](https://www.quantum-espresso.org/)
+2. (under development) Post-processing utilities for pw.x:
+   [dos.x](https://www.quantum-espresso.org/Doc/INPUT_DOS.html),
+   [bands.x](https://www.quantum-espresso.org/Doc/INPUT_BANDS.html),
+   [projwfc.x](https://www.quantum-espresso.org/Doc/INPUT_PROJWFC.html)
+
+
+## Contributing
+
+Contributions are welcome, both issues and pull requests. This project follows
+the [gitflow
+workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow),
+so please submit all PRs to the `develop` branch.
+
+
 ## Documentation
 
-The documentation for this project is available in `docs/src`.
+Further documentation for this project, including a guide for developers, is
+available in `docs/src`.
 
