@@ -1,0 +1,28 @@
+<PP_INFO>
+Generated using Vanderbilt code, version   7  3  6                              
+Author: kfg        Generation date:    3    2 2014                              
+Automatically converted from original format                                    
+    0        The Pseudo was generated with a Non-Relativistic Calculation
+  1.25000000000E+00    Local Potential cutoff radius
+nl pn  l   occ               Rcut            Rcut US             E pseu
+2S  2  0  2.00      0.00000000000      1.25000000000     -1.75764509000
+2P  2  1  4.00      0.00000000000      1.25000000000     -0.66426119100
+</PP_INFO>
+
+
+<PP_HEADER>
+   0                   Version Number
+  O                    Element
+   US                  Ultrasoft pseudopotential
+    T                  Nonlinear Core Correction
+SLA  PW   PBE  PBE     PBE  Exchange-Correlation functional
+    6.00000000000      Z valence
+  -31.78877677520      Total energy
+    0.00000    0.00000 Suggested cutoff for wfc and rho
+    2                  Max angular momentum component
+  737                  Number of points in mesh
+    2    5             Number of Wavefunctions, Number of Projectors
+ Wavefunctions         nl  l   occ
+                       2S  0  2.00
+                       2P  1  4.00
+</PP_HEADER>
