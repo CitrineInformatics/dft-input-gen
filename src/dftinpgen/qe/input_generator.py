@@ -1,5 +1,4 @@
 import os
-import glob
 import json
 import six
 
@@ -81,7 +80,6 @@ class PwxInputGenerator(DftInputGenerator):
             overwrite_files=overwrite_files,
             **kwargs)
         self.set_params_from_structure()
-        self.set_pseudopotentials()
 
     def set_params_from_structure(self):
         """Helper function to update some settings, e.g. number of atoms and the
@@ -97,7 +95,7 @@ class PwxInputGenerator(DftInputGenerator):
     def get_pseudo_dir(self):
         """Helper function to set the pseudopotential directory."""
         if 'pseudo_dir' in self.calculation_settings:
-            return
+            return self.calculation_settings['pseudo_dir']
         if 'pseudo_repo_dir' not in self.calculation_settings:
             return
         if 'pseudo_set' not in self.calculation_settings:
@@ -107,42 +105,58 @@ class PwxInputGenerator(DftInputGenerator):
             self.calculation_settings['pseudo_set'])
         return psp_dir
 
-    def set_pseudopotentials(self):
+    @staticmethod
+    def get_psp_name(species, psp_dir, ignore_missing=False):
+        def _elem_from_fname(fname):
+            bname = os.path.basename(fname)
+            elem = bname.partition('.')[0].partition('_')[0].lower()
+            return elem
+        if not os.path.isdir(psp_dir):
+            if ignore_missing:
+                return
+            msg = 'Pseudopotentials directory "{}" not found'.format(psp_dir)
+            raise PwxInputGeneratorError(msg)
+        elem_low = get_elem_symbol(species).lower()
+        psp_dir_files = os.listdir(psp_dir)
+        # match psp iff a *.UPF filename matches element symbol in structure
+        psp = [os.path.basename(p) for p in psp_dir_files if
+               (_elem_from_fname(p) == elem_low and
+               os.path.splitext(p)[-1].lower() == '.upf')]
+        if psp:
+            return psp[0]
+        elif ignore_missing:
+            return
+        else:
+            msg = 'Pseudopotential not found for {}'.format(species)
+            raise PwxInputGeneratorError(msg)
+
+    def set_pseudopotentials(self, ignore_missing=False):
         """Helper function to set the pseudopotential for each species."""
         if self.crystal_structure is None:
             return
         # get the pseudopotentials directory
         psp_dir = self.get_pseudo_dir()
         if psp_dir is None:
-            return
-        elif not os.path.isdir(psp_dir):
-            msg = 'Pseudopotentials directory "{}" not found'.format(psp_dir)
+            if ignore_missing:
+                return
+            msg = 'Pseudopotentials directory not specified'
             raise PwxInputGeneratorError(msg)
-        # unless `pseudo_dir` is user-specified, add it to custom settings
-        if 'pseudo_dir' not in self.calculation_settings:
-            self.custom_sett_dict.update({'pseudo_dir': psp_dir})
-        print('Pseudopotentials directory set to {}'.format(psp_dir))
         # read in pseudopotentials for each elemental species
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         if 'psp_names' not in self.custom_sett_dict:
             self.custom_sett_dict['psp_names'] = {}
         for sp in species:
             self.custom_sett_dict['psp_names'].update({
-                sp: self.get_psp_name(sp, psp_dir)
+                sp: self.get_psp_name(
+                    sp, psp_dir, ignore_missing=ignore_missing)
             })
         print('Pseudopotentials set for all elemental species')
-
-    @staticmethod
-    def get_psp_name(species, psp_dir):
-        elem_low = get_elem_symbol(species).lower()
-        psp = glob.glob(os.path.join(psp_dir, '*'))
-        psp = [os.path.basename(p) for p in psp]
-        psp = [p for p in psp if
-               p.partition('.')[0].partition('_')[0].lower() == elem_low]
-        if psp:
-            return psp[0]
-        msg = 'Pseudopotential not found for {}'.format(species)
-        raise PwxInputGeneratorError(msg)
+        # if `pseudo_dir` is not user-specified, add the
+        # `pseudo_repo_dir/pseudo_set` directory as `pseudo_dir` to custom
+        # calculation settings
+        if 'pseudo_dir' not in self.calculation_settings:
+            self.custom_sett_dict.update({'pseudo_dir': psp_dir})
+        print('Pseudopotentials directory set to {}'.format(psp_dir))
 
     @property
     def calculation_settings(self):
@@ -156,7 +170,9 @@ class PwxInputGenerator(DftInputGenerator):
             calc_sett.update(self.custom_sett_dict)
         return calc_sett
 
-    def namelist_to_str(self, namelist):
+    def namelist_to_str(self, namelist, ignore_missing_psp=False):
+        if namelist.lower() == 'control':
+            self.set_pseudopotentials(ignore_missing=ignore_missing_psp)
         calc_sett = self.calculation_settings
         lines = ['&{}'.format(namelist.upper())]
         for tag in QE_TAGS['pw.x']['namelist_tags'][namelist]:
@@ -176,10 +192,10 @@ class PwxInputGenerator(DftInputGenerator):
                 blocks.append(self.namelist_to_str(namelist))
         return '\n'.join(blocks)
 
-    @property
-    def atomic_species_card(self):
+    def get_atomic_species_card(self, ignore_missing_psp=False):
         if self.crystal_structure is None:
             return
+        self.set_pseudopotentials(ignore_missing=ignore_missing_psp)
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         lines = ['ATOMIC_SPECIES']
         for sp in species:
@@ -189,6 +205,10 @@ class PwxInputGenerator(DftInputGenerator):
                 self.custom_sett_dict.get('psp_names', {}).get(sp, None)
             ))
         return '\n'.join(lines)
+
+    @property
+    def atomic_species_card(self):
+        return self.get_atomic_species_card()
 
     @property
     def atomic_positions_card(self):
