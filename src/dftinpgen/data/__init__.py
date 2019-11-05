@@ -1,6 +1,10 @@
 import os
 import json
 
+
+__all__ = ['STANDARD_ATOMIC_WEIGHTS']
+
+
 """
 Standard atomic weights from
 https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses.

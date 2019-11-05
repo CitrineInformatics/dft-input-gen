@@ -1,7 +1,6 @@
 import os
 
 from dftinpgen.data import *
-from dftinpgen.qe import *
 
 
 # single-sourcing the package version

@@ -275,16 +275,16 @@ class PwxInputGenerator(DftInputGenerator):
         return '\n'.join(blocks)
 
     @property
-    def pwinput_as_str(self):
+    def pwx_input_as_str(self):
         if self.crystal_structure is None:
             return
         return '\n'.join([self.all_namelists_as_str, self.all_cards_as_str])
 
-    def write_pwinput(self, write_location=None, filename=None):
+    def write_pwx_input(self, write_location=None, filename=None):
         if self.crystal_structure is None:
             msg = 'Crystal structure not specified'
             raise PwxInputGeneratorError(msg)
-        if not self.pwinput_as_str.strip():
+        if not self.pwx_input_as_str.strip():
             msg = 'Nothing to write (probably no input settings found.)'
             raise PwxInputGeneratorError(msg)
         if write_location is None:
@@ -293,4 +293,4 @@ class PwxInputGenerator(DftInputGenerator):
             filename = '{}.in'.format(self.base_recipe) \
                 if self.base_recipe is not None else 'pw.in'
         with open(os.path.join(write_location, filename), 'w') as fw:
-            fw.write(self.pwinput_as_str)
+            fw.write(self.pwx_input_as_str)
