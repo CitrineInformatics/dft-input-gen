@@ -19,7 +19,7 @@
         "shift": [0, 0, 0]
     },
     "pseudo_repo_dir": "~/pseudos/qe",
-    "pseudo_set": "citrine-ht",
+    "pseudo_set": "default",
     "hubbard_set": "wang",
     "namelists": ["control", "system", "electrons", "ions"],
     "cards": ["atomic_species", "atomic_positions", "kpoints", "cell_parameters"]
