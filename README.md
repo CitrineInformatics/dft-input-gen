@@ -8,7 +8,7 @@ Unopinionated input file generator for DFT codes.
 ## Requirements
 
 Python 2.7 or >=3.5, with dependencies listed in
-[requirements.txt](https://github.com/CitrineInformatics/dft-input-gen/blob/master/requirements.txt)
+[requirements.txt](https://github.com/CitrineInformatics/dft-input-gen/blob/master/requirements.txt).
 
 
 ## Installation
@@ -19,7 +19,7 @@ Python 2.7 or >=3.5, with dependencies listed in
 git clone git@github.com:CitrineInformatics/dft-input-gen.git
 ```
 
-2. Install requirements (Python versions 2.7, >=3.5 are supported):
+2. Install package requirements:
 
 ```
 cd dft-input-gen
@@ -51,7 +51,7 @@ pwig = PwxInputGenerator(crystal_structure="my_crystal_structure.cif",
 print(pwig.pwx_input_as_str)
 ```
 
-Further details, examples can be found in the package documentation.
+Further details of the API and examples can be found in the package documentation.
 
 
 ## DFT codes supported
@@ -74,6 +74,5 @@ so please submit all PRs to the `develop` branch.
 
 ## Documentation
 
-Further documentation for this project, including a guide for developers, is
+Further documentation for this package, including a guide for developers, is
 available in `docs/src`.
-
