@@ -3,9 +3,9 @@
 import os
 import pytest
 
-from dftinpgen.qe.input_generator import PwxInputGenerator
-from dftinpgen.qe.input_generator import PwxInputGeneratorError
-from dftinpgen.qe.input_generator import qe_val_formatter
+from dftinpgen.qe.pwx import PwxInputGenerator
+from dftinpgen.qe.pwx import PwxInputGeneratorError
+from dftinpgen.qe.pwx import qe_val_formatter
 
 
 @pytest.fixture
@@ -267,9 +267,9 @@ def test_all_cards_as_str(pseudo_dir, eg_struct, eg_pwx_in):
     assert pig.all_cards_as_str == all_cards
 
 
-def test_pwinput_as_str(pseudo_dir, eg_struct, eg_pwx_in):
+def test_pwx_input_as_str(pseudo_dir, eg_struct, eg_pwx_in):
     pig = PwxInputGenerator(crystal_structure=eg_struct('feo_conv.vasp'),
                             base_recipe='scf',
                             custom_sett_dict={'pseudo_dir': pseudo_dir})
     scf_in = eg_pwx_in('TEST_feo_conv_scf.in')
-    assert pig.pwinput_as_str == scf_in.rstrip('\n')
+    assert pig.pwx_input_as_str == scf_in.rstrip('\n')
