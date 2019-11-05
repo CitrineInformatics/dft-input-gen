@@ -22,23 +22,24 @@ Unopinionated input file generator for DFT codes.
 git clone git@github.com:CitrineInformatics/dft-input-gen.git
 ```
 
-2. Install Python requirements (Python versions 2.7, >=3.5 are supported)
+2. Install requirements (Python versions 2.7, >=3.5 are supported):
 
 ```
 cd dft-input-gen
 pip -r requirements.txt
-pip -r test_requirements.txt
 ```
 
-3. Install the package
+3. Install the package:
 
 ```
 pip install -e .
 ```
-or 
+
+4. (optional) Unit tests can be run using `pytest`:
 
 ```
-python setup.py install
+pip -r test_requirements.txt
+pytest -sv
 ```
 
 
