@@ -10,9 +10,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../../src'))
 
 
 # -- Project information -----------------------------------------------------
@@ -31,6 +31,12 @@ release = '0.1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.napoleon',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -59,7 +65,7 @@ html_theme_options = {
     'code_font_family': 'IBM Plex Mono',
     'font_family': 'IBM Plex Sans',
     'head_font_family': 'IBM Plex Serif',
-    'font_size': '18px',
+    'font_size': '16px',
     'code_font_size': '14px',
 }
 
@@ -67,3 +73,9 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# Example configuration for intersphinx library
+intersphinx_mapping = {'https://docs.python.org': None}
+
+# If true, `todo` and `todoList` produce output
+todo_include_todos = True
