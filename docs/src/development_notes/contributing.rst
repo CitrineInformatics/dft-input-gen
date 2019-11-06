@@ -1,0 +1,4 @@
+.. _ssec-contributing:
+
+Contributing
+++++++++++++
