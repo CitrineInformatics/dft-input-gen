@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'dftinpgen'
-copyright = '2019, Vinay Hegde'
-author = 'Vinay Hegde'
+copyright = '2019, Citrine Informatics'
+author = 'Vinay Hegde <vhegde@citrine.io>'
 
 # The full version, including alpha/beta/rc tags
 release = '0.1.0'
@@ -48,6 +48,20 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+
+html_theme_options = {
+    'description': '\n',
+    'fixed_sidebar': True,
+    'github_button': True,
+    'github_repo': 'dft-input-gen',
+    'github_user': 'CitrineInformatics',
+    'link_hover': '#000000',
+    'code_font_family': 'IBM Plex Mono',
+    'font_family': 'IBM Plex Sans',
+    'head_font_family': 'IBM Plex Serif',
+    'font_size': '18px',
+    'code_font_size': '14px',
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
