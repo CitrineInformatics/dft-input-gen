@@ -1,4 +1,4 @@
-include dftinpgen/*.txt
-include dftinpgen/data/*.json
-include dftinpgen/qe/settings/*.json
-include dftinpgen/qe/settings/base_recipes/*.json
+include src/dftinpgen/*.txt
+include src/dftinpgen/data/*.json
+include src/dftinpgen/qe/settings/*.json
+include src/dftinpgen/qe/settings/base_recipes/*.json
