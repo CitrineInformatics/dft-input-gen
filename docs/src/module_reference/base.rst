@@ -24,14 +24,15 @@ Any parameters defined in ``custom_sett_dict`` override those in
 ``custom_sett_file``, which in turn override those defined in ``base_recipe``.
 
 This hierarchical set of parameter specification is designed for convenient
-management of DFT calculations at high-throughput. For instance, default
-parameters in base recipes can be used for consistency across all calculations
-in a project. A custom settings file can be used to define additional
-parameters for a subset of calculations in the project (say, using custom GGA+U
-parameters for TM oxides). Any settings that need to be tweaked on a
-per-compound basis (say, changing charge density mixing parameters to achieve
-electronic self-consistency) can be specified in the custom settings
-dictionary.
+management of DFT calculations at high-throughput.
+For instance, default parameters in base recipes can be used for consistency
+across all calculations in a project.
+A custom settings file can be used to define additional parameters for a subset
+of calculations in the project (say, using custom GGA+U parameters for TM
+oxides).
+Any settings that need to be tweaked on a per-compound basis (say, changing
+charge density mixing parameters to achieve electronic self-consistency) can be
+specified in the custom settings dictionary.
 
 It uses `ASE IO module`_ to read user-specified crystal structures: all formats
 supported by ASE are thus naturally supported.
@@ -45,9 +46,9 @@ Note: This class is not expected to be used directly by end-users (an abstract
 class, in spirit), and is to be used to build more sophisticated classes for
 various DFT codes.
 
-Note: The interfaces defined here are unopinionated by design. There are no
-sanity checks for parameter values and how they correspond to the input crystal
-structure.
+Note: The interfaces defined here are unopinionated by design.
+There are no sanity checks for parameter values and how they correspond to the
+input crystal structure.
 
 
 Base PP input generator

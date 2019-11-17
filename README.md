@@ -51,7 +51,8 @@ pwig = PwxInputGenerator(crystal_structure="my_crystal_structure.cif",
 print(pwig.pwx_input_as_str)
 ```
 
-Further details of the API and examples can be found in the package documentation.
+Further details of the API and examples can be found in the package
+documentation.
 
 
 ## DFT codes supported
@@ -66,8 +67,8 @@ Further details of the API and examples can be found in the package documentatio
 
 ## Contributing
 
-Contributions are welcome, both issues and pull requests. This project follows
-the [gitflow
+Contributions are welcome, both issues and pull requests.
+This project follows the [gitflow
 workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow),
 so please submit all PRs to the `develop` branch.
 

@@ -4,7 +4,8 @@ Input generators for Quantum Espresso
 +++++++++++++++++++++++++++++++++++++
 
 ``dftinpgen`` provides input generator classes for codes in the `Quantum
-Espresso`_ suite. Currently supported codes are:
+Espresso`_ suite.
+Currently supported codes are:
 
 1. `PWscf (pw.x)`_ (more information :ref:`here <sssec-qe-pwx>`)
 2.  Post-processing utilities: `dos.x`_, `bands.x`_
