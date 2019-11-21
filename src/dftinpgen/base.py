@@ -159,6 +159,8 @@ class DftInputGenerator(object):
         self._overwrite_files = overwrite_files
 
     def get_kpoint_grid_from_spacing(self, spacing):
+        """Returns a list [k1, k2, k3] with the dimensions of a uniform
+        k-point grid corresponding to the input `spacing`."""
         if not self.crystal_structure:
             msg = 'Crystal structure not specified'
             raise DftInputGeneratorError(msg)
