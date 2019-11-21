@@ -1,5 +1,6 @@
 import os
 import six
+import abc
 
 import numpy as np
 import ase
@@ -11,10 +12,11 @@ class DftInputGeneratorError(Exception):
     pass
 
 
+@six.add_metaclass(abc.ABCMeta)
 class DftInputGenerator(object):
     """Base class to generate input files for a DFT calculation."""
 
-    def __init__(self, crystal_structure=None, dft_package=None,
+    def __init__(self, crystal_structure=None,
                  base_recipe=None, custom_sett_file=None,
                  custom_sett_dict=None, write_location=None,
                  overwrite_files=None, **kwargs):
@@ -27,10 +29,6 @@ class DftInputGenerator(object):
         crystal_structure: str or :class:`ase.Atoms` object
             Path to the file with the input crystal structure or an
             :class:`ase.Atoms` object resulting from `ase.io.read([filename])`.
-
-        dft_package: str, optional
-            Name of the DFT package to use for the calculation. Currently
-            available options are "qe" and "vasp" (case-insensitive).
 
         base_recipe: str, optional
             The "base" calculation settings to use--must be one of the
@@ -77,9 +75,6 @@ class DftInputGenerator(object):
         self._crystal_structure = None
         self._read_crystal_structure(crystal_structure, **kwargs)
 
-        self._dft_package = None
-        self.dft_package = dft_package
-
         self._base_recipe = None
         self.base_recipe = base_recipe
 
@@ -94,6 +89,10 @@ class DftInputGenerator(object):
 
         self._overwrite_files = True
         self.overwrite_files = overwrite_files
+
+    @abstractproperty
+    def dft_package(self):
+        return
 
     @property
     def crystal_structure(self):
@@ -113,15 +112,6 @@ class DftInputGenerator(object):
         else:
             msg = 'Expected type str/`ase.Atoms`. Found {}'.format(type(cs))
             raise TypeError(msg)
-
-    @property
-    def dft_package(self):
-        return self._dft_package
-
-    @dft_package.setter
-    def dft_package(self, dft_package):
-        if dft_package is not None:
-            self._dft_package = dft_package.lower()
 
     @property
     def base_recipe(self):
