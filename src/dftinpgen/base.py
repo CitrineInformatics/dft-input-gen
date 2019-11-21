@@ -1,6 +1,8 @@
 import os
 import six
 import abc
+from abc import abstractproperty
+from abc import abstractmethod
 
 import numpy as np
 import ase
@@ -23,8 +25,8 @@ class DftInputGenerator(object):
         """
         Constructor.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
 
         crystal_structure: str or :class:`ase.Atoms` object
             Path to the file with the input crystal structure or an
@@ -32,7 +34,7 @@ class DftInputGenerator(object):
 
         base_recipe: str, optional
             The "base" calculation settings to use--must be one of the
-            pre-defined recipes provided for the specified `dft_package`.
+            pre-defined recipes provided for `self.dft_package`.
 
             Pre-defined recipes are in
             [INSTALL_PATH]/[dft_package]/settings/base_recipes/[recipe].json
@@ -73,7 +75,7 @@ class DftInputGenerator(object):
         """
 
         self._crystal_structure = None
-        self._read_crystal_structure(crystal_structure, **kwargs)
+        self.crystal_structure = crystal_structure
 
         self._base_recipe = None
         self.base_recipe = base_recipe
@@ -82,13 +84,18 @@ class DftInputGenerator(object):
         self.custom_sett_file = custom_sett_file
 
         self._custom_sett_dict = {}
-        self.custom_sett_dict = custom_sett_dict
+        if custom_sett_dict is not None:
+            self.custom_sett_dict = custom_sett_dict
 
         self._write_location = os.getcwd()
-        self.write_location = write_location
+        if write_location is not None:
+            self.write_location = write_location
 
         self._overwrite_files = True
-        self.overwrite_files = overwrite_files
+        if overwrite_files is not None:
+            self.overwrite_files = overwrite_files
+
+        self.kwargs = kwargs
 
     @abstractproperty
     def dft_package(self):
@@ -100,15 +107,13 @@ class DftInputGenerator(object):
 
     @crystal_structure.setter
     def crystal_structure(self, cs):
-        self._read_crystal_structure(cs)
+        self._crystal_structure = self._read_crystal_structure(cs, **self.kwargs)
 
     def _read_crystal_structure(self, cs, **kwargs):
-        if cs is None:
-            return
-        elif isinstance(cs, six.string_types):
-            self._crystal_structure = io.read(cs, **kwargs)
+        if isinstance(cs, six.string_types):
+            return io.read(cs, **kwargs)
         elif isinstance(cs, ase.Atoms):
-            self._crystal_structure = cs
+            return cs
         else:
             msg = 'Expected type str/`ase.Atoms`. Found {}'.format(type(cs))
             raise TypeError(msg)
@@ -119,8 +124,7 @@ class DftInputGenerator(object):
 
     @base_recipe.setter
     def base_recipe(self, base_recipe):
-        if base_recipe is not None:
-            self._base_recipe = base_recipe.lower()
+        self._base_recipe = base_recipe
 
     @property
     def custom_sett_file(self):
@@ -136,8 +140,7 @@ class DftInputGenerator(object):
 
     @custom_sett_dict.setter
     def custom_sett_dict(self, custom_sett_dict):
-        if custom_sett_dict is not None:
-            self._custom_sett_dict = custom_sett_dict
+        self._custom_sett_dict = custom_sett_dict
 
     @property
     def write_location(self):
@@ -145,8 +148,7 @@ class DftInputGenerator(object):
 
     @write_location.setter
     def write_location(self, write_location):
-        if write_location is not None:
-            self._write_location = write_location
+        self._write_location = write_location
 
     @property
     def overwrite_files(self):
@@ -154,8 +156,7 @@ class DftInputGenerator(object):
 
     @overwrite_files.setter
     def overwrite_files(self, overwrite_files):
-        if overwrite_files is not None:
-            self._overwrite_files = overwrite_files
+        self._overwrite_files = overwrite_files
 
     def get_kpoint_grid_from_spacing(self, spacing):
         if not self.crystal_structure:
@@ -163,3 +164,11 @@ class DftInputGenerator(object):
             raise DftInputGeneratorError(msg)
         rcell = 2*np.pi*(np.linalg.inv(self.crystal_structure.cell).T)
         return list(map(int, np.ceil(np.linalg.norm(rcell, axis=1)/spacing)))
+
+    @abstractproperty
+    def calculation_settings(self):
+        return
+
+    @abstractmethod
+    def write_input_files(self):
+        return
