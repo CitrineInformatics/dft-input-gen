@@ -1,10 +1,12 @@
-import os
+import pkg_resources
 
-from dftinpgen.data import *
+
+__all__ = ['VERSION', '__version__', '__short_version__']
 
 
 # single-sourcing the package version
-with open(os.path.join(os.path.dirname(__file__), 'VERSION.txt')) as fr:
+version_file = pkg_resources.resource_filename('dftinpgen', 'VERSION.txt')
+with open(version_file, 'r') as fr:
     __version__ = fr.read().strip()
 
 VERSION = __version__

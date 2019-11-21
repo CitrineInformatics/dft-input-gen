@@ -1,5 +1,5 @@
-import os
 import json
+import pkg_resources
 
 
 __all__ = ['STANDARD_ATOMIC_WEIGHTS']
@@ -17,7 +17,7 @@ Filtered as follows:
   is not necessarily the most likely value).
 
 """
-saw_file = os.path.join(os.path.dirname(__file__),
-                        'standard_atomic_weights.json')
+saw_file = pkg_resources.resource_filename('dftinpgen.data',
+                                           'standard_atomic_weights.json')
 with open(saw_file) as fr:
     STANDARD_ATOMIC_WEIGHTS = json.load(fr)
