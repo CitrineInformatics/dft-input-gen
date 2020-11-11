@@ -69,8 +69,8 @@ documentation.
 
 Contributions are welcome, both issues and pull requests.
 This project follows the [gitflow
-workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow),
-so please submit all PRs to the `develop` branch.
+workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow); 
+please submit all PRs to the `develop` branch.
 
 
 ## Documentation

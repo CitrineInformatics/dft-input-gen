@@ -16,12 +16,14 @@ class DftInputGeneratorError(Exception):
 
 @six.add_metaclass(abc.ABCMeta)
 class DftInputGenerator(object):
-    """Base class to generate input files for a DFT calculation."""
+    """
+    Base class (interface) to model input generators for specific DFT
+    codes after.
+    """
 
-    def __init__(self, crystal_structure=None,
-                 base_recipe=None, custom_sett_file=None,
-                 custom_sett_dict=None, write_location=None,
-                 overwrite_files=None, **kwargs):
+    def __init__(self, crystal_structure=None, base_recipe=None,
+                 custom_sett_file=None, custom_sett_dict=None,
+                 write_location=None, overwrite_files=None, **kwargs):
         """
         Constructor.
 
@@ -74,8 +76,8 @@ class DftInputGenerator(object):
 
         """
 
-        self._crystal_structure = None
-        self.crystal_structure = crystal_structure
+        self._crystal_structure = self._read_crystal_structure(
+            crystal_structure, **kwargs)
 
         self._base_recipe = None
         self.base_recipe = base_recipe
@@ -87,19 +89,12 @@ class DftInputGenerator(object):
         if custom_sett_dict is not None:
             self.custom_sett_dict = custom_sett_dict
 
-        self._write_location = os.getcwd()
-        if write_location is not None:
-            self.write_location = write_location
+        self._write_location = None
+        self.write_location = write_location
 
         self._overwrite_files = True
         if overwrite_files is not None:
             self.overwrite_files = overwrite_files
-
-        self.kwargs = kwargs
-
-    @abstractproperty
-    def dft_package(self):
-        return
 
     @property
     def crystal_structure(self):
@@ -107,7 +102,7 @@ class DftInputGenerator(object):
 
     @crystal_structure.setter
     def crystal_structure(self, cs):
-        self._crystal_structure = self._read_crystal_structure(cs, **self.kwargs)
+        self._crystal_structure = self._read_crystal_structure(cs)
 
     def _read_crystal_structure(self, cs, **kwargs):
         if isinstance(cs, six.string_types):
@@ -148,7 +143,10 @@ class DftInputGenerator(object):
 
     @write_location.setter
     def write_location(self, write_location):
-        self._write_location = write_location
+        if write_location is None:
+            self._write_location = os.getcwd()
+        else:
+            self._write_location = write_location
 
     @property
     def overwrite_files(self):
@@ -168,7 +166,13 @@ class DftInputGenerator(object):
         return list(map(int, np.ceil(np.linalg.norm(rcell, axis=1)/spacing)))
 
     @abstractproperty
+    def dft_package(self):
+        """Name of the DFT package input files are generated for."""
+        return
+
+    @abstractproperty
     def calculation_settings(self):
+        """Dictionary of keywords and values used to generate input files."""
         return
 
     @abstractmethod
