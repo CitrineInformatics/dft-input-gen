@@ -1,7 +1,6 @@
 """Unit tests for helper utilities in :mod:`dftinpgen.utils`."""
 
 import os
-import six
 import pytest
 
 FOUND_ASE = False
