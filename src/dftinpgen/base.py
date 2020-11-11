@@ -11,6 +11,7 @@ from ase import io
 
 class DftInputGeneratorError(Exception):
     """Base class for errors associated with DFT input files generation."""
+
     pass
 
 
@@ -21,9 +22,16 @@ class DftInputGenerator(object):
     codes after.
     """
 
-    def __init__(self, crystal_structure=None, base_recipe=None,
-                 custom_sett_file=None, custom_sett_dict=None,
-                 write_location=None, overwrite_files=None, **kwargs):
+    def __init__(
+        self,
+        crystal_structure=None,
+        base_recipe=None,
+        custom_sett_file=None,
+        custom_sett_dict=None,
+        write_location=None,
+        overwrite_files=None,
+        **kwargs
+    ):
         """
         Constructor.
 
@@ -102,17 +110,11 @@ class DftInputGenerator(object):
     @crystal_structure.setter
     def crystal_structure(self, crystal_structure):
         if not isinstance(crystal_structure, ase.Atoms):
-            msg = 'Expected type `ase.Atoms`; found {}'.format(type(crystal_structure))
+            msg = "Expected type `ase.Atoms`; found {}".format(
+                type(crystal_structure)
+            )
             raise TypeError(msg)
         self._crystal_structure = crystal_structure
-
-    @staticmethod
-    def read_crystal_structure(crystal_structure, **kwargs):
-        if isinstance(crystal_structure, six.string_types):
-            return io.read(crystal_structure, **kwargs)
-        else:
-            msg = 'Expected type str; found {}'.format(type(crystal_structure))
-            raise TypeError(msg)
 
     @property
     def base_recipe(self):
@@ -156,15 +158,6 @@ class DftInputGenerator(object):
     @overwrite_files.setter
     def overwrite_files(self, overwrite_files):
         self._overwrite_files = overwrite_files
-
-    def get_kpoint_grid_from_spacing(self, spacing):
-        """Returns a list [k1, k2, k3] with the dimensions of a uniform
-        k-point grid corresponding to the input `spacing`."""
-        if not self.crystal_structure:
-            msg = 'Crystal structure not specified'
-            raise DftInputGeneratorError(msg)
-        rcell = 2*np.pi*(np.linalg.inv(self.crystal_structure.cell).T)
-        return list(map(int, np.ceil(np.linalg.norm(rcell, axis=1)/spacing)))
 
     @abstractproperty
     def dft_package(self):
