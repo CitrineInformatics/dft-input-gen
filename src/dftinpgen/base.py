@@ -30,9 +30,9 @@ class DftInputGenerator(object):
         Parameters
         ----------
 
-        crystal_structure: str or :class:`ase.Atoms` object
-            Path to the file with the input crystal structure or an
-            :class:`ase.Atoms` object resulting from `ase.io.read([filename])`.
+        crystal_structure: :class:`ase.Atoms` object
+            :class:`ase.Atoms` object resulting from `ase.io.read([crystal
+            structure file])`.
 
         base_recipe: str, optional
             The "base" calculation settings to use--must be one of the
@@ -71,13 +71,12 @@ class DftInputGenerator(object):
             Default: True
 
         **kwargs:
-            Arbitrary keyword arguments, e.g. to pass on to the crystal
-            structure reader module implemented in `ase`.
+            Arbitrary keyword arguments.
 
         """
 
-        self._crystal_structure = self._read_crystal_structure(
-            crystal_structure, **kwargs)
+        self._crystal_structure = None
+        self.crystal_structure = crystal_structure
 
         self._base_recipe = None
         self.base_recipe = base_recipe
@@ -101,16 +100,18 @@ class DftInputGenerator(object):
         return self._crystal_structure
 
     @crystal_structure.setter
-    def crystal_structure(self, cs):
-        self._crystal_structure = self._read_crystal_structure(cs)
+    def crystal_structure(self, crystal_structure):
+        if not isinstance(crystal_structure, ase.Atoms):
+            msg = 'Expected type `ase.Atoms`; found {}'.format(type(crystal_structure))
+            raise TypeError(msg)
+        self._crystal_structure = crystal_structure
 
-    def _read_crystal_structure(self, cs, **kwargs):
-        if isinstance(cs, six.string_types):
-            return io.read(cs, **kwargs)
-        elif isinstance(cs, ase.Atoms):
-            return cs
+    @staticmethod
+    def read_crystal_structure(crystal_structure, **kwargs):
+        if isinstance(crystal_structure, six.string_types):
+            return io.read(crystal_structure, **kwargs)
         else:
-            msg = 'Expected type str/`ase.Atoms`. Found {}'.format(type(cs))
+            msg = 'Expected type str; found {}'.format(type(crystal_structure))
             raise TypeError(msg)
 
     @property
