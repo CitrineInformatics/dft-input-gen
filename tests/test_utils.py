@@ -3,13 +3,7 @@
 import os
 import pytest
 
-FOUND_ASE = False
-try:
-    from ase import io as ase_io
-except (ImportError, ModuleNotFoundError) as err:
-    print("Unable to import the `ase` package. Some tests will be skipped")
-else:
-    FOUND_ASE = True
+from ase import io as ase_io
 
 from dftinpgen.utils import get_elem_symbol
 from dftinpgen.utils import read_crystal_structure
@@ -19,8 +13,7 @@ from dftinpgen.utils import DftinpgenUtilsError
 
 test_base_dir = os.path.dirname(__file__)
 feo_conv_file = os.path.join(test_base_dir, "qe", "files", "feo_conv.vasp")
-if FOUND_ASE:
-    feo_conv = ase_io.read(feo_conv_file)
+feo_conv = ase_io.read(feo_conv_file)
 
 
 def test_get_elem_symbol():
@@ -30,7 +23,6 @@ def test_get_elem_symbol():
         get_elem_symbol("G23")
 
 
-@pytest.mark.skipif(not FOUND_ASE, reason="ase not imported")
 def test_read_crystal_structure():
     # str with path to crystal structure file is OK
     cs = read_crystal_structure(feo_conv_file)
