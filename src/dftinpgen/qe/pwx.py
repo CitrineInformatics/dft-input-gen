@@ -179,7 +179,12 @@ class PwxInputGenerator(DftInputGenerator):
 
         elem_low = get_elem_symbol(species).lower()
         # match pseudo iff a *.UPF filename matches element symbol in structure
-        for p in os.listdir(pseudo_dir):
+        try:
+            pseudo_dir_files = os.listdir(pseudo_dir)
+        except: # generic except here for py2/py3 compatibility
+            msg = 'Failed to list contents in "{}"'.format(pseudo_dir)
+            raise PwxInputGeneratorError(msg)
+        for p in pseudo_dir_files:
             ext = os.path.splitext(p)[-1].lower()
             if _elem_from_fname(p) == elem_low and ext == ".upf":
                 return os.path.basename(p)

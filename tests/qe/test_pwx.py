@@ -44,7 +44,7 @@ def test_parameters_from_structure():
 def test_get_pseudo_name():
     # specified pseudo_dir not found
     _pseudo_dir = os.path.expanduser("~/missing_dir/default")
-    with pytest.raises((FileNotFoundError, OSError)):
+    with pytest.raises(PwxInputGeneratorError):
         PwxInputGenerator._get_pseudo_name("Fe34", _pseudo_dir)
     # pseudo not found for species
     pseudo_name = PwxInputGenerator._get_pseudo_name("Cu", pseudo_dir)

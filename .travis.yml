@@ -2,8 +2,7 @@ language: python
 
 python:
     - 2.7
-    - 3.5
-    - 3.6
+    - 3.8
 
 install:
     - sudo apt-get update
@@ -19,4 +18,3 @@ install:
 
 script:
     - pytest --cov=src/ --cov-report term-missing --cov-report term:skip-covered -s -r .
-
