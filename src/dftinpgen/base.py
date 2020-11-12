@@ -90,6 +90,7 @@ class DftInputGenerator(object):
         self.base_recipe = base_recipe
 
         self._custom_sett_file = None
+        self._custom_sett_from_file = {}
         self.custom_sett_file = custom_sett_file
 
         self._custom_sett_dict = {}
@@ -110,9 +111,8 @@ class DftInputGenerator(object):
     @crystal_structure.setter
     def crystal_structure(self, crystal_structure):
         if not isinstance(crystal_structure, ase.Atoms):
-            msg = "Expected type `ase.Atoms`; found {}".format(
-                type(crystal_structure)
-            )
+            input_type = type(crystal_structure)
+            msg = 'Expected type "ase.Atoms"; found "{}"'.format(input_type)
             raise TypeError(msg)
         self._crystal_structure = crystal_structure
 
@@ -131,6 +131,16 @@ class DftInputGenerator(object):
     @custom_sett_file.setter
     def custom_sett_file(self, custom_sett_file):
         self._custom_sett_file = custom_sett_file
+        self._custom_sett_from_file = self._read_custom_sett_from_file()
+
+    @property
+    def custom_sett_from_file(self):
+        return self._custom_sett_from_file
+
+    @custom_sett_from_file.setter
+    def custom_sett_from_file(self, custom_sett_from_file):
+        msg = "Cannot set this attribute directly; set `custom_sett_file` instead"
+        raise DftInputGeneratorError(msg)
 
     @property
     def custom_sett_dict(self):
@@ -159,6 +169,12 @@ class DftInputGenerator(object):
     def overwrite_files(self, overwrite_files):
         self._overwrite_files = overwrite_files
 
+    def _read_custom_sett_from_file(self):
+        if self.custom_sett_file is None:
+            return {}
+        with open(self.custom_sett_file, "r") as fr:
+            return json.load(fr)
+
     @abstractproperty
     def dft_package(self):
         """Name of the DFT package input files are generated for."""
@@ -166,7 +182,8 @@ class DftInputGenerator(object):
 
     @abstractproperty
     def calculation_settings(self):
-        """Dictionary of keywords and values used to generate input files."""
+        """Dictionary of all user-input and auto-determined settings used to
+        generate input files."""
         return
 
     @abstractmethod
