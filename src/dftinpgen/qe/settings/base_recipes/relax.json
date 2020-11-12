@@ -15,11 +15,10 @@
     "mixing_beta": 0.5,
     "kpoints": {
         "scheme": "automatic",
-        "spacing": 0.2,
+        "spacing": 0.15,
         "shift": [0, 0, 0]
     },
-    "pseudo_repo_dir": "~/pseudos/qe",
-    "pseudo_set": "default",
+    "pseudo_dir": "~/pseudos/qe/default",
     "hubbard_set": "wang",
     "namelists": ["control", "system", "electrons", "ions"],
     "cards": ["atomic_species", "atomic_positions", "kpoints", "cell_parameters"]
