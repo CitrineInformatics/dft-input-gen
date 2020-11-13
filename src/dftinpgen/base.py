@@ -18,7 +18,7 @@ class DftInputGeneratorError(Exception):
 @six.add_metaclass(abc.ABCMeta)
 class DftInputGenerator(object):
     """
-    Base class (interface) to model input generators for specific DFT
+    Base abstract class to model input generators for specific DFT
     codes after.
     """
 
