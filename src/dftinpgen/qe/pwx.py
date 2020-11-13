@@ -26,6 +26,8 @@ def qe_val_formatter(val):
 
 
 class PwxInputGeneratorError(DftInputGeneratorError):
+    """Base class for handling errors related to input files generation for pw.x."""
+
     pass
 
 
@@ -181,7 +183,7 @@ class PwxInputGenerator(DftInputGenerator):
         # match pseudo iff a *.UPF filename matches element symbol in structure
         try:
             pseudo_dir_files = os.listdir(pseudo_dir)
-        except: # generic except here for py2/py3 compatibility
+        except:  # generic except here for py2/py3 compatibility
             msg = 'Failed to list contents in "{}"'.format(pseudo_dir)
             raise PwxInputGeneratorError(msg)
         for p in pseudo_dir_files:
@@ -244,6 +246,8 @@ class PwxInputGenerator(DftInputGenerator):
         return calc_sett
 
     def namelist_to_str(self, namelist):
+        """Convert all tags, values corresponding to a pw.x namelist into a
+        formatted string."""
         if namelist.lower() == "control":
             if not self.calculation_settings.get("pseudo_dir"):
                 if self.set_potentials:
@@ -352,6 +356,7 @@ class PwxInputGenerator(DftInputGenerator):
         return "\n".join([self.all_namelists_as_str, self.all_cards_as_str])
 
     def write_pwx_input(self, write_location=None, filename=None):
+        """Write the pw.x input file to disk at the specified location."""
         if not self.pwx_input_as_str.strip():
             msg = "Nothing to write. No input settings found?"
             raise PwxInputGeneratorError(msg)
