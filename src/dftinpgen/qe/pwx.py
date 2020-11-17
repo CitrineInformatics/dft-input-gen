@@ -126,6 +126,10 @@ class PwxInputGenerator(DftInputGenerator):
             Arbitrary keyword arguments.
 
         """
+        # TODO(@hegdevinayi): Add default Hubbard schemes (Wang/Aykol/Bennett)
+        # TODO(@hegdevinayi): Add default magnetism schemes (ferro/AFM G-type)
+        # TODO(@hegdevinayi): Consider allowing psp location via config file
+
         super(PwxInputGenerator, self).__init__(
             crystal_structure=crystal_structure,
             base_recipe=base_recipe,
