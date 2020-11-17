@@ -42,6 +42,7 @@ class PwxInputGenerator(DftInputGenerator):
         custom_sett_dict=None,
         set_potentials=None,
         write_location=None,
+        pwx_input_file=None,
         overwrite_files=None,
         **kwargs
     ):
@@ -107,6 +108,15 @@ class PwxInputGenerator(DftInputGenerator):
         write_location: str, optional
             Path to the directory in which to write the input file(s).
 
+            Default: Current working directory.
+
+        pwx_input_file: str, optional
+            Name of the file in which to write the formatted pw.x input
+            content.
+
+            Default: "[`base_recipe`].in" if `base_recipe` is specified by
+            the user, else "pwx.in".
+
         overwrite_files: bool, optional
             To overwrite files or not, that is the question.
 
@@ -130,6 +140,9 @@ class PwxInputGenerator(DftInputGenerator):
 
         self._set_potentials = True
         self.set_potentials = set_potentials
+
+        self._pwx_input_file = self.get_default_pwx_input_file()
+        self.pwx_input_file = pwx_input_file
 
     @property
     def crystal_structure(self):
@@ -156,6 +169,15 @@ class PwxInputGenerator(DftInputGenerator):
     def set_potentials(self, set_potentials):
         if set_potentials is not None:
             self._set_potentials = set_potentials
+
+    @property
+    def pwx_input_file(self):
+        return self._pwx_input_file
+
+    @pwx_input_file.setter
+    def pwx_input_file(self, pwx_input_file):
+        if pwx_input_file is not None:
+            self._pwx_input_file = pwx_input_file
 
     @property
     def dft_package(self):
@@ -346,9 +368,9 @@ class PwxInputGenerator(DftInputGenerator):
                 blocks.append(getattr(self, "{}_card".format(card)))
         return "\n".join(blocks)
 
-    def get_default_input_filename(self):
+    def get_default_pwx_input_file(self):
         if self.base_recipe is None:
-            return "pw.in"
+            return "pwx.in"
         return "{}.in".format(self.base_recipe)
 
     @property
@@ -372,5 +394,5 @@ class PwxInputGenerator(DftInputGenerator):
     def write_input_files(self):
         self.write_pwx_input(
             write_location=self.write_location,
-            filename=self.get_default_input_filename(),
+            filename=self.pwx_input_file,
         )
