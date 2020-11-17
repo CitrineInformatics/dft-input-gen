@@ -7,7 +7,7 @@ Unopinionated input file generator for DFT codes.
 
 ## Requirements
 
-Python 2.7 or >=3.5, with dependencies listed in
+Python >=2.7 or >=3.8, with dependencies listed in
 [requirements.txt](https://github.com/CitrineInformatics/dft-input-gen/blob/master/requirements.txt).
 
 
@@ -42,12 +42,21 @@ pytest -sv
 
 ## Usage
 
-For a standard `scf` calculation using `pw.x`:
+To generate input files to run an `scf` calculation using `pw.x` for a input
+crystal structure in `my_crystal_structure.cif`, do:
 
 ```
+from dftinpgen.utils import read_crystal_structure
 from dftinpgen.qe.pwx import PwxInputGenerator
-pwig = PwxInputGenerator(crystal_structure="my_crystal_structure.cif",
-                         base_recipe="scf")
+
+# read the input crystal into an `ase.Atoms` object
+crystal_structure = read_crystal_structure("my_crystal_structure.cif")
+
+# print formatted pw.x input to standard output
+pwig = PwxInputGenerator(
+   crystal_structure=crystal_structure,
+   calculation_presets="scf",
+)
 print(pwig.pwx_input_as_str)
 ```
 
