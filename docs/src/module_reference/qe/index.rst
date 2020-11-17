@@ -8,8 +8,6 @@ Espresso`_ suite.
 Currently supported codes are:
 
 1. `PWscf (pw.x)`_ (more information :ref:`here <sssec-qe-pwx>`)
-2.  Post-processing utilities: `dos.x`_, `bands.x`_
-
 
 .. _`Quantum Espresso`: https://www.quantum-espresso.org/resources/users-manual
 .. _`PWscf (pw.x)`: https://www.quantum-espresso.org/Doc/INPUT_PW.html
@@ -27,4 +25,3 @@ Currently supported codes are:
 
     pwx
     settings
-    

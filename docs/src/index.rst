@@ -3,25 +3,27 @@ dftinpgen
 
 Unopinionated input file generator for DFT codes.
 
-``dftinpgen`` generates input files from user-specified key-value pairs.
-It does not validate values, and simply formats the key-values pairs for the
-DFT code of interest.
-It also provides default settings for some common calculation types, which can
-be used to build more customized input settings.
+``dftinpgen`` implements high-level interfaces that help generate input files
+from user-specified key-value pairs.
+By design, there is no validation of input, only formatting of the key-values
+pairs for the DFT code of interest.
+The package also provides default settings for some common types of DFT
+calculations (``calculation_presets``), which can be used as is or used to
+build more customized input settings.
 
-Installation instructions can be found here_.
+Installation instructions can be found in the README_.
 
-.. _here: https://github.com/CitrineInformatics/dft-input-gen
+Examples of using the tool can be found in the `demo module`_.
 
-
-[Add examples of API usage here]
+.. _README: https://github.com/CitrineInformatics/dft-input-gen
+.. _demo module: https://github.com/CitrineInformatics/dft-input-gen/tree/master/src/dftinpgen/demo 
 
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
     :hidden:
 
-    development_notes/index
+    developer_notes/index
     module_reference/index
 
 
@@ -29,5 +31,4 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`

@@ -4,59 +4,59 @@
 Base input generators
 +++++++++++++++++++++
 
-``dftinpgen`` provides some base input generator classes to build DFT
-code-specific classes from.
+``dftinpgen`` implements some high-level interfaces to build DFT
+code-specific input generator classes from.
 
 
 Base DFT input generator
 ========================
 
-The base :class:`DftInputGenerator <dftinpgen.base.DftInputGenerator>` class
-provides an interface to specify settings for input file generation (for a
-user-specified crystal structure file) in three ways:
+The abstract :class:`DftInputGenerator <dftinpgen.base.DftInputGenerator>`
+class provides a common interface to model code-specific input generators.
+The input crystal structure must be an `ase.Atoms`_ object obtained via,
+e.g., using the `ase.io.read` module or other means.
+Settings for the DFT calculation are allowed to be specified by the user
+using one or more of the following inputs:
 
-1. ``base_recipe``: a set of default parameters (packaged with ``dftinpgen``;
-   see :ref:`sssec-qe-input-settings` for more information)
-2. ``custom_sett_file``: a file with parameters
-3. ``custom_sett_dict``: a dictionary of parameters
+1. ``calculation_presets``: a set of default parameters to use for common
+   calculation types (packaged with ``dftinpgen``; see
+   :ref:`sssec-qe-input-settings` for more information)
+2. ``custom_sett_file``: a JSON file with parameter names and values
+3. ``custom_sett_dict``: a dictionary of parameter names and values
 
 Any parameters defined in ``custom_sett_dict`` override those in
-``custom_sett_file``, which in turn override those defined in ``base_recipe``.
+``custom_sett_file``, which in turn override those loaded from the specified
+``calculation_presets``.
 
 This hierarchical set of parameter specification is designed for convenient
 management of DFT calculations at high-throughput.
 For instance, default parameters in base recipes can be used for consistency
 across all calculations in a project.
 A custom settings file can be used to define additional parameters for a subset
-of calculations in the project (say, using custom GGA+U parameters for TM
+of calculations in the project (e.g., using custom GGA+U parameters for TM
 oxides).
-Any settings that need to be tweaked on a per-compound basis (say, changing
-charge density mixing parameters to achieve electronic self-consistency) can be
-specified in the custom settings dictionary.
+Any settings that need to be tweaked on a per-compound basis (e.g., changing
+charge density mixing parameters to achieve electronic self-consistency
+during runtime) can be specified in the custom settings dictionary.
 
-It uses `ASE IO module`_ to read user-specified crystal structures: all formats
-supported by ASE are thus naturally supported.
+.. _`ase.Atoms`: https://wiki.fysik.dtu.dk/ase/ase/atoms.html
+.. _`ase.io.read`: https://wiki.fysik.dtu.dk/ase/ase/io/io.html#ase.io.read
 
-.. _`ASE IO module`: https://wiki.fysik.dtu.dk/ase/ase/io/io.html
+The interface is intended to provide a barebones structure for derived
+classes and is therefore very flexible.
+It requires only the following attributes to be implemented by any derived
+classes:
 
-It provides some DFT code-agnostic functionality, e.g. generating a uniform
-k-mesh from a user-specified k-spacing.
+1. ``dft_package``: a property with the name of the DFT package supported by
+   the class.
+2. ``calculation_settings``: a property with the aggregated dictionary of
+   user-input and any autodetermined DFT settings.
+3. ``write_input_files``: a method that writes input files to a specified
+   location or to reasonable defaults.
 
-Note: This class is not expected to be used directly by end-users (an abstract
-class, in spirit), and is to be used to build more sophisticated classes for
-various DFT codes.
-
-Note: The interfaces defined here are unopinionated by design.
-There are no sanity checks for parameter values and how they correspond to the
-input crystal structure.
-
-
-Base PP input generator
-=======================
-
-Information about the base class for generating input for post-processing codes
-such as bands.x and dos.x goes here.
-
+**Note**: The interfaces defined here are unopinionated by design.
+There are no sanity checks for parameter values and if/how they correspond to
+the input crystal structure.
 
 
 Interfaces

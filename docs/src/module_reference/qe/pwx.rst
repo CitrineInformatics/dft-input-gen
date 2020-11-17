@@ -5,49 +5,41 @@ Input for PWscf (pw.x)
 
 The :class:`PwxInputGenerator <dftinpgen.qe.pwx.PwxInputGenerator>` class
 (derived from :class:`DftInputGenerator <dftinpgen.base.DftInputGenerator>`)
-provides functionality to generate input files for the `PWscf (pw.x)`_
+implements functionality to generate input files for the `PWscf (pw.x)`_
 package.
 
 For a user-specified crystal structure and calculation parameters, different
 parts of a typical input file (i.e. different `namelists and cards`_) can be
-generated separately, if required.
-The ``OCCUPATIONS``, ``CONSTRAINTS``, ``ATOMIC_FORCES`` cards are currently not
-implemented.
+generated separately, as required.
 
 For each namelist/card, the code simply formats the values for keys specified
 in the settings, if that key is valid for that namelist/card.
 The list of valid keys for each namelist/card is looked up from a ``QE_TAGS``
 dictionary (more information about the dictionary of valid keys, and default
-parameters/values provided as "base recipes" is :ref:`here
+parameters/values provided as ``calculation_presets`` is :ref:`here
 <sssec-qe-input-settings>`).
 
 The ``KPOINTS`` card generator functionality provides options to specify the
 scheme (e.g. ``gamma``, ``automatic``), and to either directly input the grid
 itself or let the grid be generated automatically based on an input k-spacing.
 
-The pseudopotentials to be listed in the input file can be specified in two
-different ways in the input calculation settings:
+The user can specify whether to set potentials before generating input files
+or not.
+This key is useful for generating dummy input files without any potentials
+information which can later be manually filled in, e.g., location on a remote
+cluster that is not available while generating input files.
+Potentials for each species can be manually specified or automatically
+matched to a file in the input ``pseudo_dir``.
+Note that in the latter case, the current implementation looks for
+pseudopotential files (ending with ``*.UPF``/``*.upf``) in the specified
+pseudopotentials directory, and matches each chemical species to a file with
+the species in its name (first match).
 
-1. ``pseudo_repo_dir`` + ``pseudo_set``
-2. ``pseudo_dir``
+Generation of the various namelists and cards in the input file is done
+lazily, i.e., most sections are constructed only when requested.
 
-Specifying a pseudopotentials repository + set is for convenient central
-storage of all pseudopotentials, and easy switching between
-internally-compatible sets of pseudopotentials.
-If ``pseudo_dir`` is not specified, it is assumed to be
-``[pseudo_repo_dir]/[pseudo_set]``. A directly specified ``pseudo_dir``
-overrides specifying the repository and set separately.
-In either case, the code looks for pseudopotential files (ending with
-``*.UPF``/``*.upf``) in the previously specified pseudopotentials directory for
-each elemental species, and assigns the first pseudopotential it finds to the
-respective species.
-A one-to-one mapping between elemental species in the input crystal structure
-and pseudopotential files is enforced unless specified otherwise.
-
-Generation of the various namelists and cards in the input file (including
-automatic generation of k-point grids and setting pseudopotentials) is done
-lazily: most sections are constructed only when requested.
-
+**Note:** The ``OCCUPATIONS``, ``CONSTRAINTS``, ``ATOMIC_FORCES`` cards are
+currently not implemented.
 
 .. _`PWscf (pw.x)`: https://www.quantum-espresso.org/Doc/pw_user_guide/
 .. _`namelists and cards`: https://www.quantum-espresso.org/Doc/INPUT_PW.html
