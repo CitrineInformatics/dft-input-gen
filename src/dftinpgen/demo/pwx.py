@@ -1,4 +1,4 @@
-"""Demo generating input files for doing an vc-relax calculation with pw.x."""
+"""Demo generating input files for doing a calculation with pw.x."""
 
 import sys
 import pkg_resources
