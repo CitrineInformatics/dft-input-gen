@@ -4,10 +4,6 @@ import abc
 from abc import abstractproperty
 from abc import abstractmethod
 
-import numpy as np
-import ase
-from ase import io
-
 
 class DftInputGeneratorError(Exception):
     """Base class for errors associated with DFT input files generation."""
