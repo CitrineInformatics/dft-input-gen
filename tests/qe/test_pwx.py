@@ -57,7 +57,6 @@ def test_get_pseudo_name():
 def test_get_pseudo_names():
     # do not setup potentials: no errors
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
-    pwig.set_potentials = False
     pseudo_names = pwig.get_pseudo_names()
     assert pseudo_names == {"Al": None}
     # crystal structure specified, non existing pseudo dir: no error
@@ -105,6 +104,7 @@ def test_relax_base_calculation_settings():
 def test_control_namelist_to_str():
     # control namelist without pseudo, settings: error
     pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    pwig.set_potentials = True
     with pytest.raises(PwxInputGeneratorError):
         pwig.namelist_to_str("control")
     # set_potentials = False: no error
@@ -174,6 +174,7 @@ def test_atomic_species_card():
         crystal_structure=feo_struct,
         base_recipe="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
+        set_potentials=True,
     )
     card = "\n".join(feo_scf_in.splitlines()[20:23])
     assert pwig.atomic_species_card == card
@@ -224,6 +225,7 @@ def test_all_cards_as_str():
         crystal_structure=feo_struct,
         base_recipe="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
+        set_potentials=True,
     )
     all_cards = "\n".join(feo_scf_in.splitlines()[20:])
     assert pwig.all_cards_as_str == all_cards
@@ -234,5 +236,6 @@ def test_pwx_input_as_str():
         crystal_structure=feo_struct,
         base_recipe="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
+        set_potentials=True,
     )
     assert pwig.pwx_input_as_str == feo_scf_in.rstrip("\n")

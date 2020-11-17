@@ -103,7 +103,7 @@ class PwxInputGenerator(DftInputGenerator):
             pseudopotential names for every species listed in the
             "ATOMIC_SPECIES" card.
 
-            Default: True
+            Default: False
 
         write_location: str, optional
             Path to the directory in which to write the input file(s).
@@ -138,7 +138,7 @@ class PwxInputGenerator(DftInputGenerator):
         self._parameters_from_structure = self.get_parameters_from_structure()
         self._calculation_settings = self.get_calculation_settings()
 
-        self._set_potentials = True
+        self._set_potentials = False
         self.set_potentials = set_potentials
 
         self._pwx_input_file = self.get_default_pwx_input_file()
