@@ -1,12 +1,18 @@
 import os
 import glob
 import json
+import pkg_resources
 
 
 __all__ = ["QE_PRESETS"]
 
 
-presets_jsons = glob.glob(os.path.join(os.path.dirname(__file__), "*.json"))
+presets_jsons = glob.glob(
+    pkg_resources.resource_filename(
+        "dftinpgen.qe.settings.calculation_presets", "*.json"
+    )
+)
+
 
 QE_PRESETS = {}
 for presets_json in presets_jsons:
