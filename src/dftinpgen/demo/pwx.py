@@ -30,13 +30,13 @@ def get_parser():
         help=structure_file,
     )
 
-    calculation_type = """DFT calculation type to use default settings for."""
+    calculation_presets = """Preset group of tags and default values to use."""
     parser.add_argument(
         "-c",
-        "--calculation-type",
+        "--calculation-presets",
         choices=["scf", "relax", "vc-relax"],
         default="scf",
-        help=calculation_type,
+        help=calculation_presets,
     )
 
     custom_settings_file = "Path to JSON file with custom DFT settings."
@@ -85,7 +85,7 @@ def generate_pwx_input(sys_args):
 
     pwig = PwxInputGenerator(
         crystal_structure=crystal_structure,
-        base_recipe=args.calculation_type,
+        calculation_presets=args.calculation_presets,
         custom_sett_file=args.custom_settings_file,
         custom_sett_dict=custom_settings_dict,
         pwx_input_file=args.pwx_input_file,
@@ -100,8 +100,8 @@ def generate_pwx_input(sys_args):
 if __name__ == "__main__":
     """
     When run as a script, this module will generate input files to use with
-    pw.x, for a specified crystal structure, calculation type, and any custom
-    DFT settings on top of preset defaults.
+    pw.x, for a specified crystal structure, calculation presets, and any
+    custom DFT settings on top of preset defaults.
 
     For a list of optional arguments, see `get_parser()` or run this script
     with "-h" as an argument.

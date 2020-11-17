@@ -82,7 +82,7 @@ def test_bare_base_calculation_settings():
 
 def test_scf_base_calculation_settings():
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
-    pwig.base_recipe = "scf"
+    pwig.calculation_presets = "scf"
     pwig.calculation_settings = pwig.get_calculation_settings()
     cs = pwig.calculation_settings
     assert cs["calculation"] == "scf"
@@ -94,7 +94,7 @@ def test_scf_base_calculation_settings():
 
 def test_relax_base_calculation_settings():
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
-    pwig.base_recipe = "relax"
+    pwig.calculation_presets = "relax"
     pwig.calculation_settings = pwig.get_calculation_settings()
     cs = pwig.calculation_settings
     assert cs["calculation"] == "relax"
@@ -122,7 +122,7 @@ def test_control_namelist_to_str():
         pwig.namelist_to_str("control")
     # normal functionality
     pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
-    pwig.base_recipe = "scf"
+    pwig.calculation_presets = "scf"
     pwig.calculation_settings = pwig.get_calculation_settings()
     control = "\n".join(feo_scf_in.splitlines()[:7])
     assert pwig.namelist_to_str("control") == control
@@ -131,7 +131,7 @@ def test_control_namelist_to_str():
 def test_namelist_to_str():
     pwig = PwxInputGenerator(
         crystal_structure=al_fcc_struct,
-        base_recipe="scf",
+        calculation_presets="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
     )
     control = "\n".join(al_fcc_scf_in.splitlines()[:7])
@@ -143,7 +143,7 @@ def test_namelist_to_str():
 def test_all_namelists_as_str():
     pwig = PwxInputGenerator(
         crystal_structure=al_fcc_struct,
-        base_recipe="scf",
+        calculation_presets="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
     )
     namelists = "\n".join(al_fcc_scf_in.splitlines()[:20])
@@ -172,7 +172,7 @@ def test_get_atomic_species_card():
 def test_atomic_species_card():
     pwig = PwxInputGenerator(
         crystal_structure=feo_struct,
-        base_recipe="scf",
+        calculation_presets="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
         set_potentials=True,
     )
@@ -181,13 +181,17 @@ def test_atomic_species_card():
 
 
 def test_atomic_positions_card():
-    pwig = PwxInputGenerator(crystal_structure=feo_struct, base_recipe="scf")
+    pwig = PwxInputGenerator(
+        crystal_structure=feo_struct, calculation_presets="scf"
+    )
     card = "\n".join(feo_scf_in.splitlines()[23:28])
     assert pwig.atomic_positions_card == card
 
 
 def test_kpoints_card():
-    pwig = PwxInputGenerator(crystal_structure=feo_struct, base_recipe="scf")
+    pwig = PwxInputGenerator(
+        crystal_structure=feo_struct, calculation_presets="scf"
+    )
     assert pwig.kpoints_card == "K_POINTS {automatic}\n9 9 9 0 0 0"
     pwig = PwxInputGenerator(
         crystal_structure=al_fcc_struct,
@@ -223,7 +227,7 @@ def test_atomic_forces_card():
 def test_all_cards_as_str():
     pwig = PwxInputGenerator(
         crystal_structure=feo_struct,
-        base_recipe="scf",
+        calculation_presets="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
         set_potentials=True,
     )
@@ -234,7 +238,7 @@ def test_all_cards_as_str():
 def test_pwx_input_as_str():
     pwig = PwxInputGenerator(
         crystal_structure=feo_struct,
-        base_recipe="scf",
+        calculation_presets="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
         set_potentials=True,
     )

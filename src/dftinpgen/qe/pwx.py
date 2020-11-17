@@ -9,7 +9,7 @@ from dftinpgen.data import STANDARD_ATOMIC_WEIGHTS
 from dftinpgen.utils import get_elem_symbol
 from dftinpgen.utils import get_kpoint_grid_from_spacing
 from dftinpgen.qe.settings import QE_TAGS
-from dftinpgen.qe.settings.base_recipes import QE_BASE_RECIPES
+from dftinpgen.qe.settings.calculation_presets import QE_PRESETS
 
 from dftinpgen.base import DftInputGenerator
 from dftinpgen.base import DftInputGeneratorError
@@ -37,7 +37,7 @@ class PwxInputGenerator(DftInputGenerator):
     def __init__(
         self,
         crystal_structure=None,
-        base_recipe=None,
+        calculation_presets=None,
         custom_sett_file=None,
         custom_sett_dict=None,
         set_potentials=None,
@@ -56,25 +56,25 @@ class PwxInputGenerator(DftInputGenerator):
             :class:`ase.Atoms` object from `ase.io.read([crystal structure
             file])`.
 
-        base_recipe: str, optional
+        calculation_presets: str, optional
             The "base" calculation settings to use--must be one of the
-            pre-defined recipes provided for QE.
+            pre-defined groups of tags and values provided for pw.x.
 
-            Pre-defined recipes are in
-            [INSTALL_PATH]/qe/settings/base_recipes/
+            Pre-defined settings for some common calculation types are in
+            [INSTALL_PATH]/qe/settings/calculation_presets/
 
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
             dictionary of tags and values.
 
             NB: Custom settings specified here always OVERRIDE those in
-            `base_recipe` in case of overlap.
+            `calculation_presets` in case of overlap.
 
         custom_sett_dict: dict, optional
             Dictionary with custom calculation settings as tags and values/
 
             NB: Custom settings specified here always OVERRIDE those in
-            `base_recipe` and `custom_sett_file`.
+            `calculation_presets` and `custom_sett_file`.
 
         set_potentials: bool, optional
             Whether to set pseudopotentials to use for each chemical species
@@ -114,7 +114,7 @@ class PwxInputGenerator(DftInputGenerator):
             Name of the file in which to write the formatted pw.x input
             content.
 
-            Default: "[`base_recipe`].in" if `base_recipe` is specified by
+            Default: "[`calculation_presets`].in" if `calculation_presets` is specified by
             the user, else "pwx.in".
 
         overwrite_files: bool, optional
@@ -132,7 +132,7 @@ class PwxInputGenerator(DftInputGenerator):
 
         super(PwxInputGenerator, self).__init__(
             crystal_structure=crystal_structure,
-            base_recipe=base_recipe,
+            calculation_presets=calculation_presets,
             custom_sett_file=custom_sett_file,
             custom_sett_dict=custom_sett_dict,
             write_location=write_location,
@@ -262,8 +262,8 @@ class PwxInputGenerator(DftInputGenerator):
     def get_calculation_settings(self):
         """Load all calculation settings: user-input and auto-determined."""
         calc_sett = {}
-        if self.base_recipe is not None:
-            calc_sett.update(QE_BASE_RECIPES[self.base_recipe])
+        if self.calculation_presets is not None:
+            calc_sett.update(QE_PRESETS[self.calculation_presets])
         if self.custom_sett_from_file is not None:
             calc_sett.update(self.custom_sett_from_file)
         if self.custom_sett_dict is not None:
@@ -373,9 +373,9 @@ class PwxInputGenerator(DftInputGenerator):
         return "\n".join(blocks)
 
     def get_default_pwx_input_file(self):
-        if self.base_recipe is None:
+        if self.calculation_presets is None:
             return "pwx.in"
-        return "{}.in".format(self.base_recipe)
+        return "{}.in".format(self.calculation_presets)
 
     @property
     def pwx_input_as_str(self):

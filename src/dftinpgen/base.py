@@ -21,7 +21,7 @@ class DftInputGenerator(object):
     def __init__(
         self,
         crystal_structure=None,
-        base_recipe=None,
+        calculation_presets=None,
         custom_sett_file=None,
         custom_sett_dict=None,
         write_location=None,
@@ -38,15 +38,16 @@ class DftInputGenerator(object):
             :class:`ase.Atoms` object resulting from `ase.io.read([crystal
             structure file])`.
 
-        base_recipe: str, optional
+        calculation_presets: str, optional
             The "base" calculation settings to use--must be one of the
-            pre-defined recipes provided for `self.dft_package`.
+            pre-defined groups of tags and values provided for
+            `self.dft_package`.
 
-            Pre-defined recipes are in
-            [INSTALL_PATH]/[dft_package]/settings/base_recipes/[recipe].json
+            Pre-defined settings for some common calculation types are in
+            [INSTALL_PATH]/[dft_package]/settings/calculation_presets/[calculation_preset].json
 
-            For example, if `dft_package` = "vasp", `base_recipe` = "scf", the
-            settings in "dftinpgen/vasp/settings/base_recipes/scf.json" are
+            For example, if `dft_package` = "vasp", `calculation_presets` = "scf", the
+            settings in "dftinpgen/vasp/settings/calculation_presets/scf.json" are
             used.
 
         custom_sett_file: str, optional
@@ -54,13 +55,13 @@ class DftInputGenerator(object):
             dictionary of tags and values.
 
             NB: Custom settings specified here always OVERRIDE those in
-            `base_recipe` in case of overlap.
+            `calculation_presets` in case of overlap.
 
         custom_sett_dict: dict, optional
             Dictionary with custom calculation settings as tags and values.
 
             NB: Custom settings specified here always OVERRIDE those in
-            `base_recipe` and `custom_sett_file`.
+            `calculation_presets` and `custom_sett_file`.
 
             Default: {}
 
@@ -82,8 +83,8 @@ class DftInputGenerator(object):
         self._crystal_structure = None
         self.crystal_structure = crystal_structure
 
-        self._base_recipe = None
-        self.base_recipe = base_recipe
+        self._calculation_presets = None
+        self.calculation_presets = calculation_presets
 
         self._custom_sett_file = None
         self._custom_sett_from_file = {}
@@ -113,12 +114,12 @@ class DftInputGenerator(object):
         self._crystal_structure = crystal_structure
 
     @property
-    def base_recipe(self):
-        return self._base_recipe
+    def calculation_presets(self):
+        return self._calculation_presets
 
-    @base_recipe.setter
-    def base_recipe(self, base_recipe):
-        self._base_recipe = base_recipe
+    @calculation_presets.setter
+    def calculation_presets(self, calculation_presets):
+        self._calculation_presets = calculation_presets
 
     @property
     def custom_sett_file(self):
