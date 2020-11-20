@@ -175,14 +175,14 @@ class DftInputGenerator(object):
     @abstractproperty
     def dft_package(self):
         """Name of the DFT package input files are generated for."""
-        return
+        raise NotImplementedError
 
     @abstractproperty
     def calculation_settings(self):
         """Dictionary of all user-input and auto-determined settings used to
         generate input files."""
-        return
+        raise NotImplementedError
 
     @abstractmethod
     def write_input_files(self):
-        return
+        raise NotImplementedError
