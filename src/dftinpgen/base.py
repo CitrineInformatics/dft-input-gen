@@ -4,6 +4,8 @@ import abc
 from abc import abstractproperty
 from abc import abstractmethod
 
+import ase
+
 
 class DftInputGeneratorError(Exception):
     """Base class for errors associated with DFT input files generation."""
@@ -110,6 +112,9 @@ class DftInputGenerator(object):
 
     @crystal_structure.setter
     def crystal_structure(self, crystal_structure):
+        self._set_crystal_structure(crystal_structure)
+
+    def _set_crystal_structure(self, crystal_structure):
         if not isinstance(crystal_structure, ase.Atoms):
             input_type = type(crystal_structure)
             msg = 'Expected type "ase.Atoms"; found "{}"'.format(input_type)

@@ -69,21 +69,21 @@ def test_get_pseudo_names():
         pwig._get_pseudo_names()
     # normal functionality
     pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
-    pwig.calculation_settings = pwig.get_calculation_settings()
+    pwig.calculation_settings = pwig._get_calculation_settings()
     pseudo_names = pwig._get_pseudo_names()
     assert pseudo_names == {"Al": os.path.basename(al_pseudo)}
 
 
 def test_bare_base_calculation_settings():
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
-    calc_sett = pwig.get_calculation_settings()
+    calc_sett = pwig._get_calculation_settings()
     assert calc_sett["nat"] == 4
 
 
 def test_scf_base_calculation_settings():
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
     pwig.calculation_presets = "scf"
-    pwig.calculation_settings = pwig.get_calculation_settings()
+    pwig.calculation_settings = pwig._get_calculation_settings()
     cs = pwig.calculation_settings
     assert cs["calculation"] == "scf"
     assert cs["namelists"] == ["control", "system", "electrons"]
@@ -95,7 +95,7 @@ def test_scf_base_calculation_settings():
 def test_relax_base_calculation_settings():
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
     pwig.calculation_presets = "relax"
-    pwig.calculation_settings = pwig.get_calculation_settings()
+    pwig.calculation_settings = pwig._get_calculation_settings()
     cs = pwig.calculation_settings
     assert cs["calculation"] == "relax"
     assert cs["namelists"] == ["control", "system", "electrons", "ions"]
@@ -113,7 +113,7 @@ def test_control_namelist_to_str():
     assert nl == "&CONTROL\n/"
     # with no pseudo, with settings
     pwig.custom_sett_dict.update({"calculation": "scf"})
-    pwig.calculation_settings = pwig.get_calculation_settings()
+    pwig.calculation_settings = pwig._get_calculation_settings()
     nl = pwig.namelist_to_str("control")
     assert nl == '&CONTROL\n    calculation = "scf"\n/'
     # set_potentials = True: throw error
@@ -123,7 +123,7 @@ def test_control_namelist_to_str():
     # normal functionality
     pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
     pwig.calculation_presets = "scf"
-    pwig.calculation_settings = pwig.get_calculation_settings()
+    pwig.calculation_settings = pwig._get_calculation_settings()
     control = "\n".join(feo_scf_in.splitlines()[:7])
     assert pwig.namelist_to_str("control") == control
 
@@ -163,7 +163,7 @@ def test_get_atomic_species_card():
         pwig.atomic_species_card
     # normal functionality
     pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
-    pwig.calculation_settings = pwig.get_calculation_settings()
+    pwig.calculation_settings = pwig._get_calculation_settings()
     ref_line = "O      15.99940000  {}".format(os.path.basename(o_pseudo))
     ac = pwig.atomic_species_card
     assert ac.splitlines()[-1] == ref_line

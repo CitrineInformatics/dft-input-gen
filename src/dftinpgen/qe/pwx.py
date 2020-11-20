@@ -140,7 +140,7 @@ class PwxInputGenerator(DftInputGenerator):
         )
 
         self._parameters_from_structure = self._get_parameters_from_structure()
-        self._calculation_settings = self.get_calculation_settings()
+        self._calculation_settings = self._get_calculation_settings()
 
         self._set_potentials = False
         self.set_potentials = set_potentials
@@ -148,17 +148,10 @@ class PwxInputGenerator(DftInputGenerator):
         self._pwx_input_file = self.get_default_pwx_input_file()
         self.pwx_input_file = pwx_input_file
 
-    @property
-    def crystal_structure(self):
-        return self._crystal_structure
-
-    @crystal_structure.setter
-    def crystal_structure(self, crystal_structure):
-        if not isinstance(crystal_structure, ase.Atoms):
-            input_type = type(crystal_structure)
-            msg = 'Expected type "ase.Atoms"; found "{}"'.format(input_type)
-            raise TypeError(msg)
-        self._crystal_structure = crystal_structure
+    def _set_crystal_structure(self, crystal_structure):
+        super(PwxInputGenerator, self)._set_crystal_structure(
+            crystal_structure
+        )
         self._parameters_from_structure = self._get_parameters_from_structure()
 
     @property
@@ -259,7 +252,7 @@ class PwxInputGenerator(DftInputGenerator):
     def calculation_settings(self, calculation_settings):
         self._calculation_settings = calculation_settings
 
-    def get_calculation_settings(self):
+    def _get_calculation_settings(self):
         """Load all calculation settings: user-input and auto-determined."""
         calc_sett = {}
         if self.calculation_presets is not None:
