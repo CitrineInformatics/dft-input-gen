@@ -64,7 +64,7 @@ def test_get_pseudo_names():
     pseudo_names = pwig._get_pseudo_names()
     assert pseudo_names == {"Al": None}
     # crystal structure specified, non existing pseudo dir: error
-    pwig.set_potentials = True
+    pwig.specify_potentials = True
     with pytest.raises(PwxInputGeneratorError):
         pwig._get_pseudo_names()
     # normal functionality
@@ -104,11 +104,11 @@ def test_relax_base_calculation_settings():
 def test_control_namelist_to_str():
     # control namelist without pseudo, settings: error
     pwig = PwxInputGenerator(crystal_structure=feo_struct)
-    pwig.set_potentials = True
+    pwig.specify_potentials = True
     with pytest.raises(PwxInputGeneratorError):
         pwig.namelist_to_str("control")
-    # set_potentials = False: no error
-    pwig.set_potentials = False
+    # specify_potentials = False: no error
+    pwig.specify_potentials = False
     nl = pwig.namelist_to_str("control")
     assert nl == "&CONTROL\n/"
     # with no pseudo, with settings
@@ -116,8 +116,8 @@ def test_control_namelist_to_str():
     pwig.calculation_settings = pwig._get_calculation_settings()
     nl = pwig.namelist_to_str("control")
     assert nl == '&CONTROL\n    calculation = "scf"\n/'
-    # set_potentials = True: throw error
-    pwig.set_potentials = True
+    # specify_potentials = True: throw error
+    pwig.specify_potentials = True
     with pytest.raises(PwxInputGeneratorError):
         pwig.namelist_to_str("control")
     # normal functionality
@@ -151,14 +151,14 @@ def test_all_namelists_as_str():
 
 
 def test_get_atomic_species_card():
-    # set_potentials = False, no pseudo_dir: no error
+    # specify_potentials = False, no pseudo_dir: no error
     pwig = PwxInputGenerator(crystal_structure=feo_struct)
-    pwig.set_potentials = False
+    pwig.specify_potentials = False
     ref_line = "O      15.99940000  None"
     ac = pwig.atomic_species_card
     assert ac.splitlines()[-1] == ref_line
-    # set_potentials = True, no pseudo_dir: error
-    pwig.set_potentials = True
+    # specify_potentials = True, no pseudo_dir: error
+    pwig.specify_potentials = True
     with pytest.raises(PwxInputGeneratorError):
         pwig.atomic_species_card
     # normal functionality
@@ -174,7 +174,7 @@ def test_atomic_species_card():
         crystal_structure=feo_struct,
         calculation_presets="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
-        set_potentials=True,
+        specify_potentials=True,
     )
     card = "\n".join(feo_scf_in.splitlines()[20:23])
     assert pwig.atomic_species_card == card
@@ -229,7 +229,7 @@ def test_all_cards_as_str():
         crystal_structure=feo_struct,
         calculation_presets="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
-        set_potentials=True,
+        specify_potentials=True,
     )
     all_cards = "\n".join(feo_scf_in.splitlines()[20:])
     assert pwig.all_cards_as_str == all_cards
@@ -240,6 +240,6 @@ def test_pwx_input_as_str():
         crystal_structure=feo_struct,
         calculation_presets="scf",
         custom_sett_dict={"pseudo_dir": pseudo_dir},
-        set_potentials=True,
+        specify_potentials=True,
     )
     assert pwig.pwx_input_as_str == feo_scf_in.rstrip("\n")

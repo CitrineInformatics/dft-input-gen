@@ -40,7 +40,7 @@ class PwxInputGenerator(DftInputGenerator):
         calculation_presets=None,
         custom_sett_file=None,
         custom_sett_dict=None,
-        set_potentials=None,
+        specify_potentials=None,
         write_location=None,
         pwx_input_file=None,
         overwrite_files=None,
@@ -76,7 +76,7 @@ class PwxInputGenerator(DftInputGenerator):
             NB: Custom settings specified here always OVERRIDE those in
             `calculation_presets` and `custom_sett_file`.
 
-        set_potentials: bool, optional
+        specify_potentials: bool, optional
             Whether to set pseudopotentials to use for each chemical species
             in the input crystal structure.
 
@@ -142,8 +142,8 @@ class PwxInputGenerator(DftInputGenerator):
         self._parameters_from_structure = self._get_parameters_from_structure()
         self._calculation_settings = self._get_calculation_settings()
 
-        self._set_potentials = False
-        self.set_potentials = set_potentials
+        self._specify_potentials = False
+        self.specify_potentials = specify_potentials
 
         self._pwx_input_file = self.get_default_pwx_input_file()
         self.pwx_input_file = pwx_input_file
@@ -159,13 +159,13 @@ class PwxInputGenerator(DftInputGenerator):
         return self._parameters_from_structure
 
     @property
-    def set_potentials(self):
-        return self._set_potentials
+    def specify_potentials(self):
+        return self._specify_potentials
 
-    @set_potentials.setter
-    def set_potentials(self, set_potentials):
-        if set_potentials is not None:
-            self._set_potentials = set_potentials
+    @specify_potentials.setter
+    def specify_potentials(self, specify_potentials):
+        if specify_potentials is not None:
+            self._specify_potentials = specify_potentials
 
     @property
     def pwx_input_file(self):
@@ -214,7 +214,7 @@ class PwxInputGenerator(DftInputGenerator):
         """Get names of pseudopotentials to use for each chemical species."""
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         pseudo_names = {sp: None for sp in species}
-        if not self.set_potentials:
+        if not self.specify_potentials:
             return pseudo_names
         # 1. check if pseudo names are provided in input calculation settings
         input_pseudo_names = self.calculation_settings.get("pseudo_names", {})
@@ -269,7 +269,7 @@ class PwxInputGenerator(DftInputGenerator):
         formatted string."""
         if namelist.lower() == "control":
             if not self.calculation_settings.get("pseudo_dir"):
-                if self.set_potentials:
+                if self.specify_potentials:
                     msg = "Pseudopotentials directory not specified"
                     raise PwxInputGeneratorError(msg)
         lines = ["&{}".format(namelist.upper())]
