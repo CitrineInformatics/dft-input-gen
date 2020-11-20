@@ -6,7 +6,7 @@ from ase import io as ase_io
 
 from dftinpgen.qe.pwx import PwxInputGenerator
 from dftinpgen.qe.pwx import PwxInputGeneratorError
-from dftinpgen.qe.pwx import qe_val_formatter
+from dftinpgen.qe.pwx import _qe_val_formatter
 
 
 # define module-level variables used for testing
@@ -25,10 +25,10 @@ with open(os.path.join(test_data_dir, "TEST_al_fcc_conv_scf.in"), "r") as fr:
 
 
 def test_qe_val_formatter():
-    assert qe_val_formatter(True) == ".true."
-    assert qe_val_formatter("False") == '"False"'
-    assert qe_val_formatter(12345) == "12345"
-    assert qe_val_formatter(1e-10) == "1e-10"
+    assert _qe_val_formatter(True) == ".true."
+    assert _qe_val_formatter("False") == '"False"'
+    assert _qe_val_formatter(12345) == "12345"
+    assert _qe_val_formatter(1e-10) == "1e-10"
 
 
 def test_no_crystal_structure_input_error():
