@@ -54,6 +54,9 @@ class DftInputGenerator(object):
             Location of a JSON file with custom calculation settings as a
             dictionary of tags and values.
 
+            The settings loaded from a specified file can be accessed via an
+            attribute `custom_sett_from_file`.
+
             NB: Custom settings specified here always OVERRIDE those in
             `calculation_presets` in case of overlap.
 
@@ -133,11 +136,6 @@ class DftInputGenerator(object):
     @property
     def custom_sett_from_file(self):
         return self._custom_sett_from_file
-
-    @custom_sett_from_file.setter
-    def custom_sett_from_file(self, custom_sett_from_file):
-        msg = "Cannot set this attribute directly; set `custom_sett_file` instead"
-        raise DftInputGeneratorError(msg)
 
     @property
     def custom_sett_dict(self):
