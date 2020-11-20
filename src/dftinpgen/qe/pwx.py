@@ -15,7 +15,7 @@ from dftinpgen.base import DftInputGenerator
 from dftinpgen.base import DftInputGeneratorError
 
 
-def qe_val_formatter(val):
+def _qe_val_formatter(val):
     """Format values for QE tags into strings."""
     if isinstance(val, bool):
         return ".{}.".format(str(val).lower())
@@ -187,7 +187,7 @@ class PwxInputGenerator(DftInputGenerator):
     def dft_package(self):
         return "qe"
 
-    def get_parameters_from_structure(self):
+    def _get_parameters_from_structure(self):
         """Get settings determined by input crystal structure, e.g. number of
         atoms and the number of types of species."""
         return {
@@ -217,7 +217,7 @@ class PwxInputGenerator(DftInputGenerator):
             if _elem_from_fname(p) == elem_low and ext == ".upf":
                 return os.path.basename(p)
 
-    def get_pseudo_names(self):
+    def _get_pseudo_names(self):
         """Get names of pseudopotentials to use for each chemical species."""
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         pseudo_names = {sp: None for sp in species}

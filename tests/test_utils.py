@@ -33,4 +33,4 @@ def test_read_crystal_structure():
 
 
 def test_kpoint_grid_from_spacing():
-    get_kpoint_grid_from_spacing(feo_conv, 0.2) == pytest.approx([7, 7, 7])
+    assert get_kpoint_grid_from_spacing(feo_conv, 0.2) == pytest.approx([7, 7, 7])
