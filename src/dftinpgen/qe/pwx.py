@@ -187,7 +187,7 @@ class PwxInputGenerator(DftInputGenerator):
     def dft_package(self):
         return "qe"
 
-    def get_parameters_from_structure(self):
+    def _get_parameters_from_structure(self):
         """Get settings determined by input crystal structure, e.g. number of
         atoms and the number of types of species."""
         return {
