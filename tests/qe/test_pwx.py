@@ -69,7 +69,6 @@ def test_get_pseudo_names():
         pwig._get_pseudo_names()
     # normal functionality
     pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
-    pwig.calculation_settings = pwig._get_calculation_settings()
     pseudo_names = pwig._get_pseudo_names()
     assert pseudo_names == {"Al": os.path.basename(al_pseudo)}
 
@@ -83,7 +82,6 @@ def test_bare_base_calculation_settings():
 def test_scf_base_calculation_settings():
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
     pwig.calculation_presets = "scf"
-    pwig.calculation_settings = pwig._get_calculation_settings()
     cs = pwig.calculation_settings
     assert cs["calculation"] == "scf"
     assert cs["namelists"] == ["control", "system", "electrons"]
@@ -95,7 +93,6 @@ def test_scf_base_calculation_settings():
 def test_relax_base_calculation_settings():
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
     pwig.calculation_presets = "relax"
-    pwig.calculation_settings = pwig._get_calculation_settings()
     cs = pwig.calculation_settings
     assert cs["calculation"] == "relax"
     assert cs["namelists"] == ["control", "system", "electrons", "ions"]
@@ -106,26 +103,24 @@ def test_control_namelist_to_str():
     pwig = PwxInputGenerator(crystal_structure=feo_struct)
     pwig.specify_potentials = True
     with pytest.raises(PwxInputGeneratorError):
-        pwig.namelist_to_str("control")
+        pwig._namelist_to_str("control")
     # specify_potentials = False: no error
     pwig.specify_potentials = False
-    nl = pwig.namelist_to_str("control")
+    nl = pwig._namelist_to_str("control")
     assert nl == "&CONTROL\n/"
     # with no pseudo, with settings
     pwig.custom_sett_dict.update({"calculation": "scf"})
-    pwig.calculation_settings = pwig._get_calculation_settings()
-    nl = pwig.namelist_to_str("control")
+    nl = pwig._namelist_to_str("control")
     assert nl == '&CONTROL\n    calculation = "scf"\n/'
     # specify_potentials = True: throw error
     pwig.specify_potentials = True
     with pytest.raises(PwxInputGeneratorError):
-        pwig.namelist_to_str("control")
+        pwig._namelist_to_str("control")
     # normal functionality
     pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
     pwig.calculation_presets = "scf"
-    pwig.calculation_settings = pwig._get_calculation_settings()
     control = "\n".join(feo_scf_in.splitlines()[:7])
-    assert pwig.namelist_to_str("control") == control
+    assert pwig._namelist_to_str("control") == control
 
 
 def test_namelist_to_str():
@@ -135,9 +130,9 @@ def test_namelist_to_str():
         custom_sett_dict={"pseudo_dir": pseudo_dir},
     )
     control = "\n".join(al_fcc_scf_in.splitlines()[:7])
-    assert pwig.namelist_to_str("control") == control
+    assert pwig._namelist_to_str("control") == control
     electrons = "\n".join(al_fcc_scf_in.splitlines()[17:20])
-    assert pwig.namelist_to_str("electrons") == electrons
+    assert pwig._namelist_to_str("electrons") == electrons
 
 
 def test_all_namelists_as_str():
@@ -163,7 +158,6 @@ def test_get_atomic_species_card():
         pwig.atomic_species_card
     # normal functionality
     pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
-    pwig.calculation_settings = pwig._get_calculation_settings()
     ref_line = "O      15.99940000  {}".format(os.path.basename(o_pseudo))
     ac = pwig.atomic_species_card
     assert ac.splitlines()[-1] == ref_line

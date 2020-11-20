@@ -246,11 +246,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def calculation_settings(self):
-        return self._calculation_settings
-
-    @calculation_settings.setter
-    def calculation_settings(self, calculation_settings):
-        self._calculation_settings = calculation_settings
+        return self._get_calculation_settings()
 
     def _get_calculation_settings(self):
         """Load all calculation settings: user-input and auto-determined."""
@@ -264,7 +260,7 @@ class PwxInputGenerator(DftInputGenerator):
         calc_sett.update(self.parameters_from_structure)
         return calc_sett
 
-    def namelist_to_str(self, namelist):
+    def _namelist_to_str(self, namelist):
         """Convert all tags, values corresponding to a pw.x namelist into a
         formatted string."""
         if namelist.lower() == "control":
@@ -289,7 +285,7 @@ class PwxInputGenerator(DftInputGenerator):
         blocks = []
         for namelist in QE_TAGS["pw.x"]["namelists"]:
             if namelist in self.calculation_settings.get("namelists", []):
-                blocks.append(self.namelist_to_str(namelist))
+                blocks.append(self._namelist_to_str(namelist))
         return "\n".join(blocks)
 
     @property
