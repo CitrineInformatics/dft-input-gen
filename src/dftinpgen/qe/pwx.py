@@ -15,7 +15,7 @@ from dftinpgen.base import DftInputGenerator
 from dftinpgen.base import DftInputGeneratorError
 
 
-def qe_val_formatter(val):
+def _qe_val_formatter(val):
     """Format values for QE tags into strings."""
     if isinstance(val, bool):
         return ".{}.".format(str(val).lower())
