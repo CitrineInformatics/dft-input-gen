@@ -145,7 +145,7 @@ class PwxInputGenerator(DftInputGenerator):
         self._specify_potentials = False
         self.specify_potentials = specify_potentials
 
-        self._pwx_input_file = self.get_default_pwx_input_file()
+        self._pwx_input_file = self._get_default_pwx_input_file()
         self.pwx_input_file = pwx_input_file
 
     def _set_crystal_structure(self, crystal_structure):
@@ -359,7 +359,7 @@ class PwxInputGenerator(DftInputGenerator):
                 blocks.append(getattr(self, "{}_card".format(card)))
         return "\n".join(blocks)
 
-    def get_default_pwx_input_file(self):
+    def _get_default_pwx_input_file(self):
         if self.calculation_presets is None:
             return "pwx.in"
         return "{}.in".format(self.calculation_presets)
