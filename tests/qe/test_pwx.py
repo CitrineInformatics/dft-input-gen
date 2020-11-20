@@ -57,20 +57,20 @@ def test_get_pseudo_name():
 def test_get_pseudo_names():
     # do not setup potentials: no errors
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
-    pseudo_names = pwig.get_pseudo_names()
+    pseudo_names = pwig._get_pseudo_names()
     assert pseudo_names == {"Al": None}
     # crystal structure specified, non existing pseudo dir: no error
     pwig.custom_sett_dict.update({"pseudo_dir": "missing_dir"})
-    pseudo_names = pwig.get_pseudo_names()
+    pseudo_names = pwig._get_pseudo_names()
     assert pseudo_names == {"Al": None}
     # crystal structure specified, non existing pseudo dir: error
     pwig.set_potentials = True
     with pytest.raises(PwxInputGeneratorError):
-        pwig.get_pseudo_names()
+        pwig._get_pseudo_names()
     # normal functionality
     pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
     pwig.calculation_settings = pwig.get_calculation_settings()
-    pseudo_names = pwig.get_pseudo_names()
+    pseudo_names = pwig._get_pseudo_names()
     assert pseudo_names == {"Al": os.path.basename(al_pseudo)}
 
 

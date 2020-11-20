@@ -139,7 +139,7 @@ class PwxInputGenerator(DftInputGenerator):
             overwrite_files=overwrite_files,
         )
 
-        self._parameters_from_structure = self.get_parameters_from_structure()
+        self._parameters_from_structure = self._get_parameters_from_structure()
         self._calculation_settings = self.get_calculation_settings()
 
         self._set_potentials = False
@@ -159,7 +159,7 @@ class PwxInputGenerator(DftInputGenerator):
             msg = 'Expected type "ase.Atoms"; found "{}"'.format(input_type)
             raise TypeError(msg)
         self._crystal_structure = crystal_structure
-        self._parameters_from_structure = self.get_parameters_from_structure()
+        self._parameters_from_structure = self._get_parameters_from_structure()
 
     @property
     def parameters_from_structure(self):
@@ -285,8 +285,7 @@ class PwxInputGenerator(DftInputGenerator):
                 continue
             lines.append(
                 "    {} = {}".format(
-                    tag,
-                    qe_val_formatter(self.calculation_settings.get(tag)),
+                    tag, _qe_val_formatter(self.calculation_settings.get(tag)),
                 )
             )
         lines.append("/")
@@ -303,7 +302,7 @@ class PwxInputGenerator(DftInputGenerator):
     @property
     def atomic_species_card(self):
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
-        pseudo_names = self.get_pseudo_names()
+        pseudo_names = self._get_pseudo_names()
         lines = ["ATOMIC_SPECIES"]
         for sp in species:
             lines.append(
@@ -338,8 +337,7 @@ class PwxInputGenerator(DftInputGenerator):
             shift = kpoints_sett["shift"]
             if not grid:
                 grid = get_kpoint_grid_from_spacing(
-                    self.crystal_structure,
-                    kpoints_sett["spacing"],
+                    self.crystal_structure, kpoints_sett["spacing"],
                 )
             _l = "{} {} {} {} {} {}".format(*itertools.chain(grid, shift))
             lines.append(_l)
@@ -397,6 +395,5 @@ class PwxInputGenerator(DftInputGenerator):
 
     def write_input_files(self):
         self.write_pwx_input(
-            write_location=self.write_location,
-            filename=self.pwx_input_file,
+            write_location=self.write_location, filename=self.pwx_input_file,
         )
