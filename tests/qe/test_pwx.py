@@ -291,7 +291,7 @@ def test_pwx_input_as_str():
     assert pwig.pwx_input_as_str == feo_scf_in.rstrip("\n")
 
 
-def test_write_pwx_input(tmp_path):
+def test_write_pwx_input():
     # no input settings: error
     pwig = PwxInputGenerator(crystal_structure=feo_struct)
     with pytest.raises(PwxInputGeneratorError, match="input settings"):
@@ -302,21 +302,33 @@ def test_write_pwx_input(tmp_path):
         pwig.write_pwx_input()
     # no input filename: error
     with pytest.raises(PwxInputGeneratorError, match="file to write"):
-        pwig.write_pwx_input(write_location=os.getcwd())
+        pwig.write_pwx_input(write_location="/path/to/write_location")
+
     # all ok
+    import tempfile
+
+    _tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=True)
+    filename = _tmp_file.name
+    write_location = os.path.dirname(filename)
     pwig.specify_potentials = True
     pwig.custom_sett_dict = {"pseudo_dir": pseudo_dir}
-    pwig.write_pwx_input(write_location=tmp_path, filename="test.in")
-    with open(os.path.join(tmp_path, "test.in")) as fr:
+    pwig.write_pwx_input(write_location=write_location, filename=filename)
+    with open(filename, "r") as fr:
         assert fr.read() == feo_scf_in.rstrip("\n")
 
 
-def test_write_input_files(tmp_path):
+def test_write_input_files():
+    import tempfile
+
+    _tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=True)
+    filename = _tmp_file.name
+    write_location = os.path.dirname(filename)
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
     pwig.calculation_presets = "scf"
     pwig.specify_potentials = True
     pwig.custom_sett_dict["pseudo_dir"] = pseudo_dir
-    pwig.write_location = tmp_path
+    pwig.write_location = write_location
+    pwig.pwx_input_file = filename
     pwig.write_input_files()
-    with open(os.path.join(tmp_path, "pwx.in")) as fr:
+    with open(filename, "r") as fr:
         assert fr.read() == al_fcc_scf_in.rstrip("\n")
