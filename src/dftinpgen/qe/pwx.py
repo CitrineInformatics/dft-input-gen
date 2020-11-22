@@ -176,6 +176,11 @@ class PwxInputGenerator(DftInputGenerator):
         if pwx_input_file is not None:
             self._pwx_input_file = pwx_input_file
 
+    def _get_default_pwx_input_file(self):
+        if self.calculation_presets is None:
+            return "pwx.in"
+        return "{}.in".format(self.calculation_presets)
+
     @property
     def dft_package(self):
         return "qe"
@@ -359,18 +364,13 @@ class PwxInputGenerator(DftInputGenerator):
                 blocks.append(getattr(self, "{}_card".format(card)))
         return "\n".join(blocks)
 
-    def _get_default_pwx_input_file(self):
-        if self.calculation_presets is None:
-            return "pwx.in"
-        return "{}.in".format(self.calculation_presets)
-
     @property
     def pwx_input_as_str(self):
         return "\n".join([self.all_namelists_as_str, self.all_cards_as_str])
 
     def write_pwx_input(self, write_location=None, filename=None):
         """Write the pw.x input file to disk at the specified location."""
-        if not self.pwx_input_as_str.strip():
+        if self.pwx_input_as_str.strip() == "":
             msg = "Nothing to write. No input settings found?"
             raise PwxInputGeneratorError(msg)
         if write_location is None:

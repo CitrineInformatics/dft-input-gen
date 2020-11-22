@@ -10,7 +10,7 @@ from dftinpgen.qe.pwx import _qe_val_formatter
 
 
 # define module-level variables used for testing
-# TODO hegdevinayi@gmail.com: refactor to fixtures (`pytest-data`)
+# TODO(@hegdevinayi): refactor to fixtures (`pytest-data`)
 test_data_dir = os.path.join(os.path.dirname(__file__), "files")
 pseudo_dir = os.path.join(os.path.dirname(__file__), "files")
 feo_struct = ase_io.read(os.path.join(test_data_dir, "feo_conv.vasp"))
@@ -41,6 +41,37 @@ def test_parameters_from_structure():
     assert pwig.parameters_from_structure == {"nat": 4, "ntyp": 2}
 
 
+def test_specify_potentials_attribute():
+    # default specify_potentials = False
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    assert not pwig.specify_potentials
+    # specify_potentials = True
+    pwig = PwxInputGenerator(
+        crystal_structure=feo_struct, specify_potentials=True
+    )
+    assert pwig.specify_potentials
+
+
+def test_pwx_input_file():
+    # defaults: "pwx.in" if `calculation_presets` is not input
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    assert pwig.pwx_input_file == "pwx.in"
+    # default otherwise: "[calculation_presets].in"
+    pwig = PwxInputGenerator(
+        crystal_structure=feo_struct, calculation_presets="vc-relax"
+    )
+    assert pwig.pwx_input_file == "vc-relax.in"
+    # or use any user-input file name
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    pwig.pwx_input_file = "test.in"
+    assert pwig.pwx_input_file == "test.in"
+
+
+def test_dft_package_name():
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    assert pwig.dft_package == "qe"
+
+
 def test_get_pseudo_name():
     # specified pseudo_dir not found
     _pseudo_dir = os.path.expanduser("~/missing_dir/default")
@@ -59,18 +90,34 @@ def test_get_pseudo_names():
     pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
     pseudo_names = pwig._get_pseudo_names()
     assert pseudo_names == {"Al": None}
-    # crystal structure specified, non existing pseudo dir: no error
-    pwig.custom_sett_dict.update({"pseudo_dir": "missing_dir"})
-    pseudo_names = pwig._get_pseudo_names()
-    assert pseudo_names == {"Al": None}
-    # crystal structure specified, non existing pseudo dir: error
+    # all `pseudo_names` provided in input: return them
+    pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
     pwig.specify_potentials = True
-    with pytest.raises(PwxInputGeneratorError):
+    pwig.custom_sett_dict = {"pseudo_names": {"Al": al_pseudo}}
+    assert pwig._get_pseudo_names() == {"Al": al_pseudo}
+    # missing pseudos but non-existing `pseudo_dir`: error/no-op
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    pwig.specify_potentials = True
+    # 1. no `pseudo_dir`: dir not specified error
+    with pytest.raises(PwxInputGeneratorError, match="not specified"):
         pwig._get_pseudo_names()
-    # normal functionality
-    pwig.custom_sett_dict.update({"pseudo_dir": pseudo_dir})
+    # 2. missing/wrong `pseudo_dir`: cannot listdir error
+    pwig.custom_sett_dict = {"pseudo_dir": "wrong_dir"}
+    with pytest.raises(PwxInputGeneratorError, match="list contents"):
+        pwig._get_pseudo_names()
+    # 3. all ok with correct `pseudo_dir`
+    pwig.custom_sett_dict = {"pseudo_dir": pseudo_dir}
     pseudo_names = pwig._get_pseudo_names()
-    assert pseudo_names == {"Al": os.path.basename(al_pseudo)}
+    assert pseudo_names == {
+        "Fe": os.path.basename(fe_pseudo),
+        "O": os.path.basename(o_pseudo),
+    }
+    # failed to find some pseudos: list of missing potentials error
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    pwig.specify_potentials = True
+    pwig.custom_sett_dict = {"pseudo_dir": os.path.dirname(pseudo_dir)}
+    with pytest.raises(PwxInputGeneratorError, match="Fe, O"):
+        pwig._get_pseudo_names()
 
 
 def test_bare_base_calculation_settings():
@@ -183,9 +230,14 @@ def test_atomic_positions_card():
 
 
 def test_kpoints_card():
-    pwig = PwxInputGenerator(
-        crystal_structure=feo_struct, calculation_presets="scf"
-    )
+    # unknown scheme: error
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    pwig.custom_sett_dict = {"kpoints": {"scheme": "monkhorst-pack"}}
+    with pytest.raises(NotImplementedError):
+        print(pwig.kpoints_card)
+    # default scheme from presets
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    pwig.calculation_presets = "scf"
     assert pwig.kpoints_card == "K_POINTS {automatic}\n9 9 9 0 0 0"
     pwig = PwxInputGenerator(
         crystal_structure=al_fcc_struct,
@@ -237,3 +289,34 @@ def test_pwx_input_as_str():
         specify_potentials=True,
     )
     assert pwig.pwx_input_as_str == feo_scf_in.rstrip("\n")
+
+
+def test_write_pwx_input(tmp_path):
+    # no input settings: error
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
+    with pytest.raises(PwxInputGeneratorError, match="input settings"):
+        pwig.write_pwx_input()
+    # no `write_location` input: error
+    pwig.calculation_presets = "scf"
+    with pytest.raises(PwxInputGeneratorError, match="Location to write"):
+        pwig.write_pwx_input()
+    # no input filename: error
+    with pytest.raises(PwxInputGeneratorError, match="file to write"):
+        pwig.write_pwx_input(write_location=os.getcwd())
+    # all ok
+    pwig.specify_potentials = True
+    pwig.custom_sett_dict = {"pseudo_dir": pseudo_dir}
+    pwig.write_pwx_input(write_location=tmp_path, filename="test.in")
+    with open(os.path.join(tmp_path, "test.in")) as fr:
+        assert fr.read() == feo_scf_in.rstrip("\n")
+
+
+def test_write_input_files(tmp_path):
+    pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
+    pwig.calculation_presets = "scf"
+    pwig.specify_potentials = True
+    pwig.custom_sett_dict["pseudo_dir"] = pseudo_dir
+    pwig.write_location = tmp_path
+    pwig.write_input_files()
+    with open(os.path.join(tmp_path, "pwx.in")) as fr:
+        assert fr.read() == al_fcc_scf_in.rstrip("\n")
