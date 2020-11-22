@@ -2,6 +2,7 @@
 
 import os
 import pytest
+
 from ase import io as ase_io
 
 from dftinpgen.qe.pwx import PwxInputGenerator
@@ -45,7 +46,6 @@ def test_specify_potentials_attribute():
     # default specify_potentials = False
     pwig = PwxInputGenerator(crystal_structure=feo_struct)
     assert not pwig.specify_potentials
-    # specify_potentials = True
     pwig = PwxInputGenerator(
         crystal_structure=feo_struct, specify_potentials=True
     )
