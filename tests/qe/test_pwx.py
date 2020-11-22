@@ -323,7 +323,7 @@ def test_write_input_files():
     _tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=True)
     filename = _tmp_file.name
     write_location = os.path.dirname(filename)
-    pwig = PwxInputGenerator(crystal_structure=al_fcc_struct)
+    pwig = PwxInputGenerator(crystal_structure=feo_struct)
     pwig.calculation_presets = "scf"
     pwig.specify_potentials = True
     pwig.custom_sett_dict["pseudo_dir"] = pseudo_dir
@@ -331,4 +331,4 @@ def test_write_input_files():
     pwig.pwx_input_file = filename
     pwig.write_input_files()
     with open(filename, "r") as fr:
-        assert fr.read() == al_fcc_scf_in.rstrip("\n")
+        assert fr.read() == feo_scf_in.rstrip("\n")
