@@ -96,4 +96,4 @@ if __name__ == "__main__":
     For a list of optional arguments, see `get_parser()` or run this script
     with "-h" as an argument.
     """
-    generate_pwx_input_files(sys.argv[1:])
+    generate_pwx_input_files(sys.argv[1:])  # pragma: no cover
