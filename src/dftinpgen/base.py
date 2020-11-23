@@ -60,14 +60,14 @@ class DftInputGenerator(object):
             The settings loaded from a specified file can be accessed via an
             attribute `custom_sett_from_file`.
 
-            NB: Custom settings specified here always OVERRIDE those in
+            NB: Custom settings specified here MUST OVERRIDE those in
             `calculation_presets` in case of overlap.
 
         custom_sett_dict: dict, optional
             Dictionary with custom calculation settings as tags and values.
 
-            NB: Custom settings specified here always OVERRIDE those in
-            `calculation_presets` and `custom_sett_file`.
+            NB: Custom settings specified here MUST OVERRIDE those in
+            `calculation_presets` and in `custom_sett_from_file`.
 
             Default: {}
 
