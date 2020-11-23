@@ -17,4 +17,4 @@ install:
     - pip install -e .
 
 script:
-    - pytest --cov=src/ --cov-report term-missing --cov-report term:skip-covered -svv
+    - pytest --cov=src/ --cov-report term-missing --cov-report term:skip-covered -svv --cov-fail-under=100
