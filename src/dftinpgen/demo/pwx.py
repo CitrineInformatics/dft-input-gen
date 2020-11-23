@@ -1,100 +1,90 @@
 """Demo generating input files for doing a calculation with pw.x."""
 
 import sys
+import json
 import pkg_resources
 import argparse
-import ast
 
 from ase import io as ase_io
 
+from dftinpgen.utils import read_crystal_structure
 from dftinpgen.qe.pwx import PwxInputGenerator
 
 
-FEO_STRUCTURE_FILE = pkg_resources.resource_filename(
-    "dftinpgen.demo", "feo_poscar.vasp"
-)
-
-
 def get_parser():
-    description = """Script demonstrating input file generation for pw.x."""
-    parser = argparse.ArgumentParser(
-        description=description,
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    )
+    description = """Input file generation for pw.x."""
+    parser = argparse.ArgumentParser(description=description)
 
-    structure_file = """Path to file with the input crystal structure."""
+    # Required:
+    crystal_structure = "(REQUIRED) File with the input crystal structure."
     parser.add_argument(
         "-i",
-        "--input-structure",
-        default=FEO_STRUCTURE_FILE,
-        help=structure_file,
+        "--crystal-structure",
+        type=read_crystal_structure,
+        help=crystal_structure,
+        required=True,
     )
 
-    calculation_presets = """Preset group of tags and default values to use."""
+    # Optional:
+    calculation_presets = "Preset group of tags and default values to use"
     parser.add_argument(
-        "-c",
+        "-pre",
         "--calculation-presets",
         choices=["scf", "relax", "vc-relax"],
-        default="scf",
+        default=None,
         help=calculation_presets,
     )
 
-    custom_settings_file = "Path to JSON file with custom DFT settings."
+    custom_settings_file = "JSON file with custom DFT settings to use"
     parser.add_argument(
-        "-sf",
+        "-file",
         "--custom-settings-file",
         default=None,
         help=custom_settings_file,
     )
 
-    custom_settings_dict = """Dictionary of custom DFT settings to use. NB:
-    dict items with quotes must be escaped or quoted. Example:
-    '{"pseudo_dir": "/path/to/pseudo_dir/"}'."""
+    custom_settings_dict = """JSON string with a dictionary of custom DFT
+    settings to use. Example: '{"pseudo_dir": "/path/to/pseudo_dir/"}'"""
     parser.add_argument(
-        "-sd",
+        "-dict",
         "--custom-settings-dict",
         default="{}",
-        type=str,
+        type=json.loads,
         help=custom_settings_dict,
     )
 
-    write_to_file = """Boolean specifying whether to write pw.x input to file
-    (True) or to standard output (False)."""
+    specify_potentials = "Specify a potential for every chemical species?"
     parser.add_argument(
-        "-w",
-        "--write-to-file",
-        default=False,
+        "-pot",
+        "--specify-potentials",
         type=bool,
-        help=write_to_file,
+        default=False,
+        help=specify_potentials,
     )
 
-    pwx_input_file = """Path to file in which to write pw.x input settings.
-    NB: This argument is ignored if "write_to_file" is set to False."""
-    parser.add_argument(
-        "-o", "--pwx-input-file", default="./pwx.in", help=pwx_input_file
-    )
+    write_location = "Directory to write the input file(s) in"
+    parser.add_argument("-loc", "--write-location", help=write_location)
+
+    pwx_input_file = "Name of the pw.x input file"
+    parser.add_argument("-o", "--pwx-input-file", help=pwx_input_file)
 
     return parser
 
 
-def generate_pwx_input(sys_args):
+def generate_pwx_input_files(sys_args):
     parser = get_parser()
     args = parser.parse_args(sys_args)
-    crystal_structure = ase_io.read(args.input_structure)
-    custom_settings_dict = ast.literal_eval(args.custom_settings_dict)
 
     pwig = PwxInputGenerator(
-        crystal_structure=crystal_structure,
+        crystal_structure=args.crystal_structure,
         calculation_presets=args.calculation_presets,
         custom_sett_file=args.custom_settings_file,
-        custom_sett_dict=custom_settings_dict,
+        custom_sett_dict=args.custom_settings_dict,
+        specify_potentials=args.specify_potentials,
+        write_location=args.write_location,
         pwx_input_file=args.pwx_input_file,
     )
-
-    if not args.write_to_file:
-        print(pwig.pwx_input_as_str)
-    else:
-        pwig.write_input_files()
+    pwig.write_input_files()
 
 
 if __name__ == "__main__":
@@ -106,4 +96,4 @@ if __name__ == "__main__":
     For a list of optional arguments, see `get_parser()` or run this script
     with "-h" as an argument.
     """
-    generate_pwx_input(sys.argv[1:])
+    generate_pwx_input_files(sys.argv[1:])
