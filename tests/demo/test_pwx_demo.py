@@ -22,7 +22,7 @@ def test_get_parser_required_missing(capsys):
     with pytest.raises(SystemExit):
         parser.parse_args()
     stderr = capsys.readouterr().err
-    assert "arguments are required" in stderr
+    assert "required" in stderr
 
 
 def test_get_parser_default_args():
@@ -95,7 +95,3 @@ def test_generate_pwx_input_files():
     with open(feo_scf_ref_in, "r") as fr:
         reference = fr.read().rstrip("\n")
     assert test == reference
-
-
-def test_demo_module_run():
-    import runpy
