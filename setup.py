@@ -18,7 +18,7 @@ setup(
     author_email="vhegde@citrine.io",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    python_requires=">=2.7, >=3.8",
+    python_requires=">2.6, >3.7",
     install_requires=["six", "numpy", "ase <= 3.17"],
     entry_points={"console_scripts": ["dftinpgen = dftinpgen.cli:driver",]},
     classifiers=[
