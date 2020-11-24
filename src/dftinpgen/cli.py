@@ -8,6 +8,8 @@ def get_parser():
     # create the top-level parser
     description = """Input file generation for DFT codes."""
     parser = argparse.ArgumentParser(description=description)
+    # if cli tool is run without any arguments, print usage:
+    parser.set_defaults(func=lambda x: parser.print_usage())
     subparsers = parser.add_subparsers()
 
     # add pw.x subparser
@@ -22,9 +24,9 @@ def get_parser():
     return parser
 
 
-def driver():
+def driver(*sys_args):
     parser = get_parser()
-    args = parser.parse_args()
+    args = parser.parse_args(*sys_args)
     args.func(args)
 
 
