@@ -4,19 +4,26 @@ import pytest
 import argparse
 
 from dftinpgen.utils import read_crystal_structure
-from dftinpgen.demo.pwx import get_parser
-from dftinpgen.demo.pwx import generate_pwx_input_files
+from dftinpgen.demo.pwx import _get_default_parser
+from dftinpgen.demo.pwx import build_pwx_parser
+from dftinpgen.demo.pwx import run_demo
 
 
-this_dir = os.path.dirname(__file__)
-feo_file = os.path.join(this_dir, "feo_poscar.vasp")
+files_dir = os.path.join(os.path.dirname(__file__), "files")
+feo_file = os.path.join(files_dir, "feo_poscar.vasp")
 feo_struct = read_crystal_structure(feo_file)
-sett_file = os.path.join(this_dir, "test_sett.json")
-feo_scf_ref_in = os.path.join(this_dir, "feo_scf_ref.in")
+sett_file = os.path.join(files_dir, "test_sett.json")
+feo_scf_ref_in = os.path.join(files_dir, "feo_scf_ref.in")
+
+
+def test_get_default_parser():
+    parser = _get_default_parser()
+    assert "pw.x" in parser.description
 
 
 def test_get_parser_required_missing(capsys):
-    parser = get_parser()
+    parser = _get_default_parser()
+    build_pwx_parser(parser)
 
     # input structure (required) missing: error
     with pytest.raises(SystemExit):
@@ -26,7 +33,8 @@ def test_get_parser_required_missing(capsys):
 
 
 def test_get_parser_default_args():
-    parser = get_parser()
+    parser = _get_default_parser()
+    build_pwx_parser(parser)
     args = parser.parse_args(["-i", feo_file])
     assert args.crystal_structure == feo_struct
     assert args.calculation_presets is None
@@ -36,7 +44,8 @@ def test_get_parser_default_args():
 
 
 def test_get_parser_input_args(capsys):
-    parser = get_parser()
+    parser = _get_default_parser()
+    build_pwx_parser(parser)
 
     # invalid choice for `calculation_presets`
     with pytest.raises(SystemExit):
@@ -68,7 +77,7 @@ def test_get_parser_input_args(capsys):
     assert args.pwx_input_file == "pwx.in"
 
 
-def test_generate_pwx_input_files():
+def test_run_demo():
     import tempfile
 
     _tmp_file = tempfile.NamedTemporaryFile(mode="w", delete=True)
@@ -88,7 +97,7 @@ def test_generate_pwx_input_files():
         "-o",
         os.path.basename(filename),
     ]
-    generate_pwx_input_files(args)
+    run_demo(args)
 
     with open(filename, "r") as fr:
         test = fr.read()
