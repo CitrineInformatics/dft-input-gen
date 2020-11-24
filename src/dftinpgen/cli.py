@@ -9,12 +9,11 @@ def get_parser():
     description = """Input file generation for DFT codes."""
     parser = argparse.ArgumentParser(description=description)
 
-    # dummy function to print parser usage to console
-    def _print_usage(*args):
-        return parser.print_usage(file=None)
-
     # if cli tool is run without any arguments, print usage:
-    parser.set_defaults(func=_print_usage)
+    # dummy lambda to circumvent ``'Namespace' object has no attribute 'func'``
+    # error if the `print_usage` function is used as is.
+    # do the passed args mess up the `file=None` defaults?
+    parser.set_defaults(func=lambda _: parser.print_usage())
 
     # add subparsers
     subparsers = parser.add_subparsers()
