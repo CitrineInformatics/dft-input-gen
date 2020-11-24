@@ -45,19 +45,27 @@ pytest -sv
 To generate input files to run an `scf` calculation using `pw.x` for a input
 crystal structure in `my_crystal_structure.cif`, do:
 
-```
+### API
+
+```python
 from dftinpgen.utils import read_crystal_structure
 from dftinpgen.qe.pwx import PwxInputGenerator
 
 # read the input crystal into an `ase.Atoms` object
-crystal_structure = read_crystal_structure("my_crystal_structure.cif")
+crystal_structure = read_crystal_structure("/path/to/my_crystal_structure.cif")
 
 # print formatted pw.x input to standard output
 pwig = PwxInputGenerator(
    crystal_structure=crystal_structure,
    calculation_presets="scf",
 )
-print(pwig.pwx_input_as_str)
+pwig.write_input_files()
+```
+
+### CLI
+
+```bash
+$ dftinpgen pw.x -i /path/to/my_crystal_structure.cif -pre scf
 ```
 
 Further details of the API and examples can be found in the package

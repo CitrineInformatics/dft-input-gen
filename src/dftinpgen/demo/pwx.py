@@ -11,12 +11,17 @@ from dftinpgen.utils import read_crystal_structure
 from dftinpgen.qe.pwx import PwxInputGenerator
 
 
-def get_parser():
-    description = """Input file generation for pw.x."""
-    parser = argparse.ArgumentParser(description=description)
+def _get_default_parser():
+    description = "Input file generation for pw.x."
+    return argparse.ArgumentParser(description=description)
+
+
+def build_pwx_parser(parser):
+    """Adds arguments specific to pw.x input file generator to an input
+    `argparse.ArgumentParser` object."""
 
     # Required:
-    crystal_structure = "(REQUIRED) File with the input crystal structure."
+    crystal_structure = "(REQUIRED) File with the input crystal structure"
     parser.add_argument(
         "-i",
         "--crystal-structure",
@@ -68,13 +73,8 @@ def get_parser():
     pwx_input_file = "Name of the pw.x input file"
     parser.add_argument("-o", "--pwx-input-file", help=pwx_input_file)
 
-    return parser
 
-
-def generate_pwx_input_files(sys_args):
-    parser = get_parser()
-    args = parser.parse_args(sys_args)
-
+def generate_pwx_input_files(args):
     pwig = PwxInputGenerator(
         crystal_structure=args.crystal_structure,
         calculation_presets=args.calculation_presets,
@@ -87,13 +87,19 @@ def generate_pwx_input_files(sys_args):
     pwig.write_input_files()
 
 
+def run_demo(*sys_args):
+    parser = _get_default_parser()
+    build_pwx_parser(parser)
+    args = parser.parse_args(*sys_args)
+    generate_pwx_input_files(args)
+
+
 if __name__ == "__main__":
     """
     When run as a script, this module will generate input files to use with
     pw.x, for a specified crystal structure, calculation presets, and any
     custom DFT settings on top of preset defaults.
 
-    For a list of optional arguments, see `get_parser()` or run this script
-    with "-h" as an argument.
+    For a list of optional arguments, run this script with "-h" argument.
     """
-    generate_pwx_input_files(sys.argv[1:])  # pragma: no cover
+    run_demo()  # pragma: no cover

@@ -10,6 +10,7 @@ install:
     - bash miniconda.sh -b
     - export PATH="$HOME/miniconda3/bin:$PATH"
     - conda update --yes -n base conda
+    - conda info -a
     - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION pytest
     - source activate testenv
     - pip install -r requirements.txt
