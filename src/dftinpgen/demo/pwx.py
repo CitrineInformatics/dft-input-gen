@@ -1,11 +1,7 @@
 """Demo generating input files for doing a calculation with pw.x."""
 
-import sys
 import json
-import pkg_resources
 import argparse
-
-from ase import io as ase_io
 
 from dftinpgen.utils import read_crystal_structure
 from dftinpgen.qe.pwx import PwxInputGenerator

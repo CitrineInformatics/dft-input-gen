@@ -1,9 +1,6 @@
 import os
-import json
 import six
 import itertools
-
-import ase
 
 from dftinpgen.data import STANDARD_ATOMIC_WEIGHTS
 from dftinpgen.utils import get_elem_symbol
@@ -205,9 +202,10 @@ class PwxInputGenerator(DftInputGenerator):
 
         elem_low = get_elem_symbol(species).lower()
         # match pseudo iff a *.UPF filename matches element symbol in structure
+        # Note: generic except here for py2/py3 compatibility
         try:
             pseudo_dir_files = os.listdir(os.path.expanduser(pseudo_dir))
-        except:  # generic except here for py2/py3 compatibility
+        except:  # noqa: E722
             msg = 'Failed to list contents in "{}"'.format(pseudo_dir)
             raise PwxInputGeneratorError(msg)
         for p in pseudo_dir_files:
