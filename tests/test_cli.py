@@ -12,9 +12,15 @@ def test_get_parser(capsys):
 
 
 def test_driver(capsys):
-    # without-args default: no error, print usage
-    driver([])
-    assert "usage: " in capsys.readouterr().out
+    # without-args default: print usage
+    # Python 3: argparse does not complain
+    # Python 2: argparse throws an error, exits
+    try:
+        driver([])
+        msg = capsys.readouterr().out
+    except SystemExit:
+        msg = capsys.readouterr().err
+    assert "usage: " in msg
 
     # subparser: invalid dft package choice error
     with pytest.raises(SystemExit):
