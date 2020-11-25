@@ -13,30 +13,10 @@ Python >=2.7 or >=3.8, with dependencies listed in
 
 ## Installation
 
-1. Clone from Github:
+`dftinpgen` can be installed with `pip`:
 
 ```
-git clone git@github.com:CitrineInformatics/dft-input-gen.git
-```
-
-2. Install package requirements:
-
-```
-cd dft-input-gen
-pip -r requirements.txt
-```
-
-3. Install the package:
-
-```
-pip install -e .
-```
-
-4. (optional) Unit tests can be run using `pytest`:
-
-```
-pip -r test_requirements.txt
-pytest -sv
+$ pip install dftinpgen
 ```
 
 
@@ -45,7 +25,7 @@ pytest -sv
 To generate input files to run an `scf` calculation using `pw.x` for a input
 crystal structure in `my_crystal_structure.cif`, do:
 
-### API
+**Option 1. Using the Python API**
 
 ```python
 from dftinpgen.utils import read_crystal_structure
@@ -62,7 +42,7 @@ pwig = PwxInputGenerator(
 pwig.write_input_files()
 ```
 
-### CLI
+**Option 2. Using the `dftinpgen` command line tool**
 
 ```bash
 $ dftinpgen pw.x -i /path/to/my_crystal_structure.cif -pre scf
@@ -85,12 +65,4 @@ documentation.
 ## Contributing
 
 Contributions are welcome, both issues and pull requests.
-This project follows the [gitflow
-workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow); 
-please submit all PRs to the `develop` branch.
-
-
-## Documentation
-
-Further documentation for this package, including a guide for developers, is
-available in `docs/src`.
+Guidelines are [here](CONTRIBUTING.md).
