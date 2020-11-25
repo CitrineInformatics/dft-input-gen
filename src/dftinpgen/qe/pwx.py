@@ -23,7 +23,7 @@ def _qe_val_formatter(val):
 
 
 class PwxInputGeneratorError(DftInputGeneratorError):
-    """Base class for handling errors related to input files generation for pw.x."""
+    """Base class for pw.x input files generation errors."""
 
     pass
 
@@ -57,7 +57,7 @@ class PwxInputGenerator(DftInputGenerator):
             pre-defined groups of tags and values provided for pw.x.
 
             Pre-defined settings for some common calculation types are in
-            [INSTALL_PATH]/qe/settings/calculation_presets/
+            INSTALL_PATH/qe/settings/calculation_presets/
 
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
@@ -110,8 +110,8 @@ class PwxInputGenerator(DftInputGenerator):
             Name of the file in which to write the formatted pw.x input
             content.
 
-            Default: "[`calculation_presets`].in" if `calculation_presets` is specified by
-            the user, else "pwx.in".
+            Default: "[`calculation_presets`].in" if `calculation_presets` is
+            specified by the user, else "pwx.in".
 
         overwrite_files: bool, optional
             To overwrite files or not, that is the question.

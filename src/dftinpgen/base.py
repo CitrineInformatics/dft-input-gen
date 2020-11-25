@@ -43,11 +43,11 @@ class DftInputGenerator(object):
             `self.dft_package`.
 
             Pre-defined settings for some common calculation types are in
-            [INSTALL_PATH]/[dft_package]/settings/calculation_presets/[calculation_preset].json
+            INSTALL_PATH/[dft_package]/settings/calculation_presets/[preset].json
 
-            For example, if `dft_package` = "vasp", `calculation_presets` = "scf", the
-            settings in "dftinpgen/vasp/settings/calculation_presets/scf.json" are
-            used.
+            E.g., if `dft_package` = "vasp", `calculation_presets` = "scf",
+            the settings in
+            "dftinpgen/vasp/settings/calculation_presets/scf.json" are used.
 
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
