@@ -21,10 +21,6 @@ pip install -U -r test_requirements.txt
 pip install --no-deps -e .
 ```
 
-Changes to code must pass all tests, maintain 100% test coverage, and follow
-style guidelines.
-
-
 ### Running tests
 We use [pytest](https://docs.pytest.org/en/stable/contents.html) to run tests.
 To run all tests:
@@ -38,15 +34,16 @@ We use [pytest-cov](https://pytest-cov.readthedocs.io/en/latest) to check
 code coverage.
 To run all tests and output a report of the coverage of the `src` directory:
 ```bash
-pytest --cov=src/ --cov-report term-missing --cov-report term:skip-covered -svv .
+pytest --cov=src/ --cov-report term-missing -svv
 ```
 
 ## Coding Style
 
 `dftinpgen` follows [PEP8](https://www.python.org/dev/peps/pep-0008/), with
 several docstring rules relaxed.
-Several docstring rules are relaxed (see `tox.ini` for a list of the ignored
-rules).
+See `tox.ini` for a list of the ignored rules.
+Docstrings must follow the
+[Numpy style](https://numpydoc.readthedocs.io/en/latest/format.html).
 
 We use [flake8](https://flake8.pycqa.org/en/latest/) as a linter.
 To run the linter on the `src` directory:
@@ -61,12 +58,6 @@ A pre-commit hook is available to auto-format code with
 2. Install black: ``$ pip install black``
 3. Install pre-commit: ``$ pip install pre-commit``
 4. Intall git hooks in your ``.git`` directory: ``$ pre-commit install``
-
-Docstrings must follow the
-[Numpy style](https://numpydoc.readthedocs.io/en/latest/format.html).
-
-For additional (non-binding) inspiration, check out the
-[Google Python Style Guide](https://github.com/google/styleguide/blob/gh-pages/pyguide.md).
 
 
 ## PR Submission
