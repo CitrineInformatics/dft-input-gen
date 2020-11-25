@@ -16,10 +16,7 @@ class DftInputGeneratorError(Exception):
 
 @six.add_metaclass(abc.ABCMeta)
 class DftInputGenerator(object):
-    """
-    Base abstract class to model input generators for specific DFT
-    codes after.
-    """
+    """Base abstract class for DFT input generators."""
 
     def __init__(
         self,
@@ -36,7 +33,6 @@ class DftInputGenerator(object):
 
         Parameters
         ----------
-
         crystal_structure: :class:`ase.Atoms` object
             :class:`ase.Atoms` object resulting from `ase.io.read([crystal
             structure file])`.
@@ -85,7 +81,6 @@ class DftInputGenerator(object):
             Arbitrary keyword arguments.
 
         """
-
         self._crystal_structure = None
         self.crystal_structure = crystal_structure
 
@@ -109,6 +104,7 @@ class DftInputGenerator(object):
 
     @property
     def crystal_structure(self):
+        """Input crystal structure as an `ase.Atoms` object."""
         return self._crystal_structure
 
     @crystal_structure.setter
@@ -124,6 +120,7 @@ class DftInputGenerator(object):
 
     @property
     def calculation_presets(self):
+        """Default settings ("presets") to use for generating input files."""
         return self._calculation_presets
 
     @calculation_presets.setter
@@ -132,6 +129,7 @@ class DftInputGenerator(object):
 
     @property
     def custom_sett_file(self):
+        """Path to a JSON file with custom settings dictionary."""
         return self._custom_sett_file
 
     @custom_sett_file.setter
@@ -141,10 +139,12 @@ class DftInputGenerator(object):
 
     @property
     def custom_sett_from_file(self):
+        """Dictionary of custom settings read from `custom_sett_file`."""
         return self._custom_sett_from_file
 
     @property
     def custom_sett_dict(self):
+        """Dictionary of custom settings to use for generating input."""
         return self._custom_sett_dict
 
     @custom_sett_dict.setter
@@ -153,6 +153,7 @@ class DftInputGenerator(object):
 
     @property
     def write_location(self):
+        """Path to the directory in which to write the DFT input files."""
         return self._write_location
 
     @write_location.setter
@@ -164,6 +165,7 @@ class DftInputGenerator(object):
 
     @property
     def overwrite_files(self):
+        """Should existing files at `write_location` be overwritten."""
         return self._overwrite_files
 
     @overwrite_files.setter
@@ -183,10 +185,10 @@ class DftInputGenerator(object):
 
     @abstractproperty
     def calculation_settings(self):
-        """Dictionary of all user-input and auto-determined settings used to
-        generate input files."""
+        """Dictionary of all settings used to generate input files."""
         raise NotImplementedError
 
     @abstractmethod
     def write_input_files(self):
+        """Write DFT input files in the specified location."""
         raise NotImplementedError

@@ -39,12 +39,13 @@ def read_crystal_structure(crystal_structure, **kwargs):
 
 
 def get_kpoint_grid_from_spacing(crystal_structure, spacing):
-    """Returns a list [k1, k2, k3] with the dimensions of a uniform
+    """Get k-point grid for an input crystal structure and k-spacing.
+
+    Returns a list [k1, k2, k3] with the dimensions of a uniform
     k-point grid corresponding to the input `spacing`.
 
     Parameters
     ----------
-
     crystal_structure: `ase.Atoms` object
         Crystal structure for which to calculate k-point grid
 
@@ -54,7 +55,6 @@ def get_kpoint_grid_from_spacing(crystal_structure, spacing):
 
     Returns
     -------
-
     k-point grid as a 3 x 1 list of integers.
 
     """

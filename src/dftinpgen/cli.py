@@ -5,6 +5,7 @@ from dftinpgen.demo.pwx import generate_pwx_input_files
 
 
 def get_parser():
+    """Returns an argument parser for the CLI tool."""
     # create the top-level parser
     description = """Input file generation for DFT codes."""
     parser = argparse.ArgumentParser(description=description)
@@ -31,6 +32,7 @@ def get_parser():
 
 
 def driver(*sys_args):
+    """CLI driver function."""
     parser = get_parser()
     args = parser.parse_args(*sys_args)
     args.func(args)
