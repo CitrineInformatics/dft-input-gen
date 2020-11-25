@@ -1,22 +1,14 @@
 language: python
 
 python:
-  - 2.7
-  - 3.8
+- '2.7'
+- '3.8'
 
 install:
-  - sudo apt-get update
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-  - bash miniconda.sh -b
-  - export PATH="$HOME/miniconda3/bin:$PATH"
-  - conda update --yes -n base conda
-  - conda info -a
-  - conda create --yes -n testenv python=$TRAVIS_PYTHON_VERSION
-  - source activate testenv
-  - python -m pip install -r requirements.txt
-  - python -m pip install -r test_requirements.txt
-  - python -m pip install -e .
+- pip install -r requirements.txt
+- pip install -r test_requirements.txt
+- pip install -e .
 
 script:
-  - pytest --cov=src/ --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini --cov-fail-under=100 -svv
-  - python -m flake8 src
+- pytest --cov=src/ --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini --cov-fail-under=100 -svv .
+- flake8 src
