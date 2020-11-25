@@ -1,1 +1,1 @@
-from dftinpgen.qe.pwx import PwxInputGenerator
+from dftinpgen.qe.pwx import PwxInputGenerator  # noqa: F401

@@ -1,9 +1,6 @@
 import os
-import json
 import six
 import itertools
-
-import ase
 
 from dftinpgen.data import STANDARD_ATOMIC_WEIGHTS
 from dftinpgen.utils import get_elem_symbol
@@ -26,7 +23,7 @@ def _qe_val_formatter(val):
 
 
 class PwxInputGeneratorError(DftInputGeneratorError):
-    """Base class for handling errors related to input files generation for pw.x."""
+    """Base class for pw.x input files generation errors."""
 
     pass
 
@@ -51,7 +48,6 @@ class PwxInputGenerator(DftInputGenerator):
 
         Parameters
         ----------
-
         crystal_structure: :class:`ase.Atoms` object
             :class:`ase.Atoms` object from `ase.io.read([crystal structure
             file])`.
@@ -61,7 +57,7 @@ class PwxInputGenerator(DftInputGenerator):
             pre-defined groups of tags and values provided for pw.x.
 
             Pre-defined settings for some common calculation types are in
-            [INSTALL_PATH]/qe/settings/calculation_presets/
+            INSTALL_PATH/qe/settings/calculation_presets/
 
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a
@@ -114,8 +110,8 @@ class PwxInputGenerator(DftInputGenerator):
             Name of the file in which to write the formatted pw.x input
             content.
 
-            Default: "[`calculation_presets`].in" if `calculation_presets` is specified by
-            the user, else "pwx.in".
+            Default: "[`calculation_presets`].in" if `calculation_presets` is
+            specified by the user, else "pwx.in".
 
         overwrite_files: bool, optional
             To overwrite files or not, that is the question.
@@ -156,10 +152,12 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def parameters_from_structure(self):
+        """DFT parameters auto-determined for the input crystal structure."""
         return self._parameters_from_structure
 
     @property
     def specify_potentials(self):
+        """Should potentials be specified for each chemical species."""
         return self._specify_potentials
 
     @specify_potentials.setter
@@ -169,6 +167,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def pwx_input_file(self):
+        """Name of the pw.x input file to write to."""
         return self._pwx_input_file
 
     @pwx_input_file.setter
@@ -183,11 +182,15 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def dft_package(self):
+        """Name of the DFT package (pw.x is part of Quantum Espresso)."""
         return "qe"
 
     def _get_parameters_from_structure(self):
-        """Get settings determined by input crystal structure, e.g. number of
-        atoms and the number of types of species."""
+        """Determine DFT settings from input crystal structure.
+
+        This includes some required parameters, e.g. number of atoms and the
+        number of types of species.
+        """
         return {
             "nat": len(self.crystal_structure),
             "ntyp": len(set(self.crystal_structure.get_chemical_symbols())),
@@ -195,9 +198,10 @@ class PwxInputGenerator(DftInputGenerator):
 
     @staticmethod
     def _get_pseudo_name(species, pseudo_dir):
-        """Helper function to match species to its pseudopotential in a
-        specified directory."""
-
+        """Match chemical species::pseudopotential in a given directory."""
+        # filler for black/flake8 compatibility
+        # empty line after docstring relaxed in pydocstyle>5.0
+        # this will have to stay due to py2 (pydocstyle ceil = 3.0.0)
         def _elem_from_fname(fname):
             bname = os.path.basename(fname)
             elem = bname.partition(".")[0].partition("_")[0].lower()
@@ -205,9 +209,10 @@ class PwxInputGenerator(DftInputGenerator):
 
         elem_low = get_elem_symbol(species).lower()
         # match pseudo iff a *.UPF filename matches element symbol in structure
+        # Note: generic except here for py2/py3 compatibility
         try:
             pseudo_dir_files = os.listdir(os.path.expanduser(pseudo_dir))
-        except:  # generic except here for py2/py3 compatibility
+        except:  # noqa: E722
             msg = 'Failed to list contents in "{}"'.format(pseudo_dir)
             raise PwxInputGeneratorError(msg)
         for p in pseudo_dir_files:
@@ -251,6 +256,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def calculation_settings(self):
+        """Dictionary of all calculation settings to use as input pw.x."""
         return self._get_calculation_settings()
 
     def _get_calculation_settings(self):
@@ -266,8 +272,7 @@ class PwxInputGenerator(DftInputGenerator):
         return calc_sett
 
     def _namelist_to_str(self, namelist):
-        """Convert all tags, values corresponding to a pw.x namelist into a
-        formatted string."""
+        """Convert (tags, values) from a namelist into a formatted string."""
         if namelist.lower() == "control":
             if not self.calculation_settings.get("pseudo_dir"):
                 if self.specify_potentials:
@@ -287,6 +292,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def all_namelists_as_str(self):
+        """All pw.x namelists as one formatted string."""
         blocks = []
         for namelist in QE_TAGS["pw.x"]["namelists"]:
             if namelist in self.calculation_settings.get("namelists", []):
@@ -295,6 +301,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def atomic_species_card(self):
+        """pw.x ATOMIC_SPECIES card as a string."""
         species = sorted(set(self.crystal_structure.get_chemical_symbols()))
         pseudo_names = self._get_pseudo_names()
         lines = ["ATOMIC_SPECIES"]
@@ -310,6 +317,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def atomic_positions_card(self):
+        """pw.x ATOMIC_POSITIONS card as a string."""
         symbols = self.crystal_structure.get_chemical_symbols()
         positions = self.crystal_structure.get_scaled_positions()
         lines = ["ATOMIC_POSITIONS {crystal}"]
@@ -319,6 +327,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def kpoints_card(self):
+        """pw.x KPOINTS card as a string."""
         kpoints_sett = self.calculation_settings.get("kpoints", {})
         scheme = kpoints_sett.get("scheme")
         if scheme not in ["gamma", "automatic"]:
@@ -339,6 +348,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def cell_parameters_card(self):
+        """pw.x CELL_PARAMETERS card as a string."""
         lines = ["CELL_PARAMETERS {angstrom}"]
         for cv in self.crystal_structure.cell:
             lines.append("{:12.8f}  {:12.8f}  {:12.8f}".format(*cv))
@@ -346,18 +356,22 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def occupations_card(self):
+        """pw.x OCCUPATIONS card as a string."""
         raise NotImplementedError
 
     @property
     def constraints_card(self):
+        """pw.x CONSTRAINTS card as a string."""
         raise NotImplementedError
 
     @property
     def atomic_forces_card(self):
+        """pw.x ATOMIC_FORCES card as a string."""
         raise NotImplementedError
 
     @property
     def all_cards_as_str(self):
+        """All pw.x cards as one formatted string."""
         blocks = []
         for card in QE_TAGS["pw.x"]["cards"]:
             if card in self.calculation_settings.get("cards", []):
@@ -366,6 +380,7 @@ class PwxInputGenerator(DftInputGenerator):
 
     @property
     def pwx_input_as_str(self):
+        """pw.x input (all namelists + cards) as a formatted string."""
         return "\n".join([self.all_namelists_as_str, self.all_cards_as_str])
 
     def write_pwx_input(self, write_location=None, filename=None):
@@ -383,6 +398,7 @@ class PwxInputGenerator(DftInputGenerator):
             fw.write(self.pwx_input_as_str)
 
     def write_input_files(self):
+        """Write pw.x input files to the user-specified location/file."""
         self.write_pwx_input(
             write_location=self.write_location, filename=self.pwx_input_file,
         )

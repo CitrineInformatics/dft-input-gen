@@ -1,11 +1,7 @@
 """Demo generating input files for doing a calculation with pw.x."""
 
-import sys
 import json
-import pkg_resources
 import argparse
-
-from ase import io as ase_io
 
 from dftinpgen.utils import read_crystal_structure
 from dftinpgen.qe.pwx import PwxInputGenerator
@@ -17,9 +13,7 @@ def _get_default_parser():
 
 
 def build_pwx_parser(parser):
-    """Adds arguments specific to pw.x input file generator to an input
-    `argparse.ArgumentParser` object."""
-
+    """Adds pw.x arguments to the input `argparse.ArgumentParser` object."""
     # Required:
     crystal_structure = "(REQUIRED) File with the input crystal structure"
     parser.add_argument(
@@ -75,6 +69,7 @@ def build_pwx_parser(parser):
 
 
 def generate_pwx_input_files(args):
+    """Write input files for the input crystal structure."""
     pwig = PwxInputGenerator(
         crystal_structure=args.crystal_structure,
         calculation_presets=args.calculation_presets,
@@ -88,6 +83,7 @@ def generate_pwx_input_files(args):
 
 
 def run_demo(*sys_args):
+    """End-to-end run of pw.x input file generation."""
     parser = _get_default_parser()
     build_pwx_parser(parser)
     args = parser.parse_args(*sys_args)
