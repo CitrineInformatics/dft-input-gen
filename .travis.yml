@@ -1,14 +1,23 @@
 language: python
-
 python:
 - '2.7'
 - '3.8'
-
 install:
 - pip install -r requirements.txt
 - pip install -r test_requirements.txt
 - pip install -e .
-
 script:
-- pytest --cov=src/ --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini --cov-fail-under=100 -svv .
+- pytest --cov=src/ --cov-report term-missing --cov-report term:skip-covered --cov-config=tox.ini
+  --cov-fail-under=100 -svv .
 - flake8 src
+deploy:
+- provider: pypi
+  user: CitrineInformatics
+  password: "$PYPI_PASSWORD"
+  distributions: sdist bdist_wheel
+  skip_existing: true
+  on:
+    tags: true
+env:
+  global:
+    secure: M9HI5bpY5t4Rd17rjdrSo6QF4jV2JMi3hOgMzMGgly4jP1NoafOBSpJHy4TisBeE8eyrkJPJurMnF0Fw7kACtpCMT6h8tLE4r6Ss97542MJnFLV33hILdcwJZjAYfaQ0q5lrWmtNr420y5kvD1EjL3jQnYYVJC2wjAb4b5C8Ji5i/43n5Vuk3aO2BG8IzNXF0buqtAWIwyclOpr/QjkSWxf+ptj4Fv64Cy84aVTFMOGL523DRVkZgCl5vdq6gSpFTk9S/a2G16LM6GPU3ohKRzIGRzRv8HsGL4oyi2c+NjzysIdOq7yx/8crM4fADAl+xG3bh8biYJY6PVfxrR4ttNdL6UFxg0xUwPVpmngL+YjUS6DOi7cVs9VoaqsPq5mrrcZ5HvL+RaJt43o0okxBqvmZW/SRJs0fAdDLu1UKIxzH9MTpdQmuUhCyyh6muePnnzvNkSzXnZRSO2z/DUmLsRiA3qMJkY/CSIWvxqj9+tVvAT9jRjb+loWBrra3FR5+sMikmoT/Qd27xCYSrwTMBy7jgw4mOh6xNK6FmT1nS/JDpH0KrZDXwjsB2uHSw9G1EnrBF7fhXCTx7SodD9ypwKrB0aIUrRj2iUcsAKGN4mVz92KvF/OhhuLmH2+hiivSM98k2R36bZfhEuAqFTSN5DM/UoqLXckdr63vahxHlEA=

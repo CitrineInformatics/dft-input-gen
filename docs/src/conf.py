@@ -23,7 +23,9 @@ copyright = "2019, Citrine Informatics"
 author = "Vinay Hegde <vhegde@citrine.io>"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
+version_file = os.path.join("..", "..", "src", "dftinputgen", "VERSION.txt")
+with open(version_file, "r") as fr:
+    release = fr.read().strip()
 
 
 # -- General configuration ---------------------------------------------------

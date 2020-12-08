@@ -1,4 +1,4 @@
-include src/dftinpgen/*.txt
-include src/dftinpgen/data/*.json
-include src/dftinpgen/qe/settings/*.json
-include src/dftinpgen/qe/settings/calculation_presets/*.json
+include src/dftinputgen/*.txt
+include src/dftinputgen/data/*.json
+include src/dftinputgen/qe/settings/*.json
+include src/dftinputgen/qe/settings/calculation_presets/*.json
