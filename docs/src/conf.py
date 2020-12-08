@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath("../../src"))
 
 # -- Project information -----------------------------------------------------
 
-project = "dftinpgen"
+project = "dftinputgen"
 copyright = "2019, Citrine Informatics"
 author = "Vinay Hegde <vhegde@citrine.io>"
 
