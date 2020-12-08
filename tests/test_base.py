@@ -3,7 +3,7 @@ import pytest
 
 from ase import io as ase_io
 
-from dftinpgen.base import DftInputGenerator
+from dftinputgen.base import DftInputGenerator
 
 test_data_dir = os.path.join(os.path.dirname(__file__), "files")
 feo_struct = ase_io.read(os.path.join(test_data_dir, "feo_conv.vasp"))

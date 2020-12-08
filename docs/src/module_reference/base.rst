@@ -4,14 +4,14 @@
 Base input generators
 +++++++++++++++++++++
 
-``dftinpgen`` implements some high-level interfaces to build DFT
+``dftinputgen`` implements some high-level interfaces to build DFT
 code-specific input generator classes from.
 
 
 Base DFT input generator
 ========================
 
-The abstract :class:`DftInputGenerator <dftinpgen.base.DftInputGenerator>`
+The abstract :class:`DftInputGenerator <dftinputgen.base.DftInputGenerator>`
 class provides a common interface to model code-specific input generators.
 The input crystal structure must be an `ase.Atoms`_ object obtained via,
 e.g., using the `ase.io.read` module or other means.
@@ -19,7 +19,7 @@ Settings for the DFT calculation are allowed to be specified by the user
 using one or more of the following inputs:
 
 1. ``calculation_presets``: a set of default parameters to use for common
-   calculation types (packaged with ``dftinpgen``; see
+   calculation types (packaged with ``dftinputgen``; see
    :ref:`sssec-qe-input-settings` for more information)
 2. ``custom_sett_file``: a JSON file with parameter names and values
 3. ``custom_sett_dict``: a dictionary of parameter names and values
@@ -62,6 +62,6 @@ the input crystal structure.
 Interfaces
 ==========
 
-.. automodule:: dftinpgen.base
+.. automodule:: dftinputgen.base
     :members:
     :undoc-members:

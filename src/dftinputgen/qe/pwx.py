@@ -2,14 +2,14 @@ import os
 import six
 import itertools
 
-from dftinpgen.data import STANDARD_ATOMIC_WEIGHTS
-from dftinpgen.utils import get_elem_symbol
-from dftinpgen.utils import get_kpoint_grid_from_spacing
-from dftinpgen.qe.settings import QE_TAGS
-from dftinpgen.qe.settings.calculation_presets import QE_PRESETS
+from dftinputgen.data import STANDARD_ATOMIC_WEIGHTS
+from dftinputgen.utils import get_elem_symbol
+from dftinputgen.utils import get_kpoint_grid_from_spacing
+from dftinputgen.qe.settings import QE_TAGS
+from dftinputgen.qe.settings.calculation_presets import QE_PRESETS
 
-from dftinpgen.base import DftInputGenerator
-from dftinpgen.base import DftInputGeneratorError
+from dftinputgen.base import DftInputGenerator
+from dftinputgen.base import DftInputGeneratorError
 
 
 def _qe_val_formatter(val):

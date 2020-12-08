@@ -1,8 +1,8 @@
 import os
 import pytest
 
-from dftinpgen.cli import get_parser
-from dftinpgen.cli import driver
+from dftinputgen.cli import get_parser
+from dftinputgen.cli import driver
 
 
 files_dir = os.path.join(os.path.dirname(__file__), "files")

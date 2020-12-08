@@ -6,7 +6,7 @@ Developer notes
 Code Organization
 +++++++++++++++++
 
-``dftinpgen`` has the following overall structure::
+``dftinputgen`` has the following overall structure::
 
     base.py
     utils.py
@@ -28,21 +28,21 @@ Code Organization
         ...
 
 
-- ``dftinpgen.base``: base interfaces to build DFT code-specific classes from
+- ``dftinputgen.base``: base interfaces to build DFT code-specific classes from
   (more :ref:`here <sec-base-input-generator>`)
-- ``dftinpgen.qe``: derived classes that can generate input files for various
+- ``dftinputgen.qe``: derived classes that can generate input files for various
   DFT-based and postprocessing codes in the Quantum Espresso suite (more
   :ref:`here <ssec-qe>`)
-- ``dftinpgen.vasp``: [under development] derived classes that can generate
+- ``dftinputgen.vasp``: [under development] derived classes that can generate
   input files for the VASP package.
-- ``dftinpgen.utils``: general-purpose helper functions, e.g. chemical formula
+- ``dftinputgen.utils``: general-purpose helper functions, e.g. chemical formula
   parser/formatter (more :ref:`here <sec-helper-utilities>`)
-- ``dftinpgen.data``: non-user-specified data constants required to generate
+- ``dftinputgen.data``: non-user-specified data constants required to generate
   input files, e.g. standard atomic weights of all elements (more :ref:`here
   <sec-data-constants>`)
 
   Support for new DFT packages must be added as a separate module, e.g.
-  ``dftinpgen/new_dft_package``.
+  ``dftinputgen/new_dft_package``.
   Corresponding tests must be placed in the ``tests/new_dft_package`` folder.
 
 

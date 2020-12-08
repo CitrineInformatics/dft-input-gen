@@ -5,9 +5,9 @@ import pytest
 
 from ase import io as ase_io
 
-from dftinpgen.qe.pwx import PwxInputGenerator
-from dftinpgen.qe.pwx import PwxInputGeneratorError
-from dftinpgen.qe.pwx import _qe_val_formatter
+from dftinputgen.qe.pwx import PwxInputGenerator
+from dftinputgen.qe.pwx import PwxInputGeneratorError
+from dftinputgen.qe.pwx import _qe_val_formatter
 
 
 # define module-level variables used for testing

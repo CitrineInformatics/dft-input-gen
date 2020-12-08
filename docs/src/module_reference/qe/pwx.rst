@@ -3,8 +3,8 @@
 Input for PWscf (pw.x)
 ++++++++++++++++++++++
 
-The :class:`PwxInputGenerator <dftinpgen.qe.pwx.PwxInputGenerator>` class
-(derived from :class:`DftInputGenerator <dftinpgen.base.DftInputGenerator>`)
+The :class:`PwxInputGenerator <dftinputgen.qe.pwx.PwxInputGenerator>` class
+(derived from :class:`DftInputGenerator <dftinputgen.base.DftInputGenerator>`)
 implements functionality to generate input files for the `PWscf (pw.x)`_
 package.
 
@@ -48,7 +48,7 @@ currently not implemented.
 Interfaces
 ==========
 
-.. automodule:: dftinpgen.qe.pwx
+.. automodule:: dftinputgen.qe.pwx
     :members:
     :inherited-members:
     :undoc-members:

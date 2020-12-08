@@ -10,14 +10,14 @@ QE_PRESETS = {}
 
 
 preset_listdir = pkg_resources.resource_listdir(
-    "dftinpgen.qe.settings", "calculation_presets"
+    "dftinputgen.qe.settings", "calculation_presets"
 )
 for filename in preset_listdir:
     root, ext = os.path.splitext(filename)
     if not ext == ".json":
         continue
     resource = pkg_resources.resource_filename(
-        "dftinpgen.qe.settings.calculation_presets", filename
+        "dftinputgen.qe.settings.calculation_presets", filename
     )
     with open(resource, "r") as fr:
         QE_PRESETS[root] = json.load(fr)

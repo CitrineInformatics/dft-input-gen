@@ -39,7 +39,7 @@ pytest --cov=src/ --cov-report term-missing -svv
 
 ## Coding Style
 
-`dftinpgen` follows [PEP8](https://www.python.org/dev/peps/pep-0008/), with
+`dftinputgen` follows [PEP8](https://www.python.org/dev/peps/pep-0008/), with
 several docstring rules relaxed.
 See `tox.ini` for a list of the ignored rules.
 Docstrings must follow the
@@ -62,7 +62,7 @@ A pre-commit hook is available to auto-format code with
 
 ## PR Submission
 
-`dftinpgen` follows the
+`dftinputgen` follows the
 [gitflow workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow),
 so all PRs must be submitted to the `develop` branch.
 Versions must follow [semantic versioning](https://semver.org/).
@@ -75,7 +75,7 @@ A passing build requires the following:
 * Every line of code is executed by a test (100% coverage)
 
 It is recommended to complement any new large module(s) with
-example(s) in the `dftinpgen.demo` module.
+example(s) in the `dftinputgen.demo` module.
 
 
 ## Documentation

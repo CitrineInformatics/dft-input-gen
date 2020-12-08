@@ -1,4 +1,4 @@
-# dftinpgen
+# dftinputgen
 
 [![Build Status](https://travis-ci.com/CitrineInformatics/dft-input-gen.svg?token=qbMA4N9P9kHgFLrLQ51g&branch=master)](https://travis-ci.com/CitrineInformatics/dft-input-gen)
 
@@ -13,10 +13,10 @@ Python >=2.7 or >=3.8, with dependencies listed in
 
 ## Installation
 
-`dftinpgen` can be installed with `pip`:
+`dftinputgen` can be installed with `pip`:
 
 ```
-$ pip install dftinpgen
+$ pip install dftinputgen
 ```
 
 
@@ -28,8 +28,8 @@ crystal structure in `my_crystal_structure.cif`, do:
 **Option 1. Using the Python API**
 
 ```python
-from dftinpgen.utils import read_crystal_structure
-from dftinpgen.qe.pwx import PwxInputGenerator
+from dftinputgen.utils import read_crystal_structure
+from dftinputgen.qe.pwx import PwxInputGenerator
 
 # read the input crystal into an `ase.Atoms` object
 crystal_structure = read_crystal_structure("/path/to/my_crystal_structure.cif")
@@ -42,10 +42,10 @@ pwig = PwxInputGenerator(
 pwig.write_input_files()
 ```
 
-**Option 2. Using the `dftinpgen` command line tool**
+**Option 2. Using the `dftinputgen` command line tool**
 
 ```bash
-$ dftinpgen pw.x -i /path/to/my_crystal_structure.cif -pre scf
+$ dftinputgen pw.x -i /path/to/my_crystal_structure.cif -pre scf
 ```
 
 Further details of the API and examples can be found in the package

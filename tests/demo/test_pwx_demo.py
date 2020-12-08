@@ -3,10 +3,10 @@ import json
 import pytest
 import argparse
 
-from dftinpgen.utils import read_crystal_structure
-from dftinpgen.demo.pwx import _get_default_parser
-from dftinpgen.demo.pwx import build_pwx_parser
-from dftinpgen.demo.pwx import run_demo
+from dftinputgen.utils import read_crystal_structure
+from dftinputgen.demo.pwx import _get_default_parser
+from dftinputgen.demo.pwx import build_pwx_parser
+from dftinputgen.demo.pwx import run_demo
 
 
 files_dir = os.path.join(os.path.dirname(__file__), "files")

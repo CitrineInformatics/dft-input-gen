@@ -47,7 +47,7 @@ class DftInputGenerator(object):
 
             E.g., if `dft_package` = "vasp", `calculation_presets` = "scf",
             the settings in
-            "dftinpgen/vasp/settings/calculation_presets/scf.json" are used.
+            "dftinputgen/vasp/settings/calculation_presets/scf.json" are used.
 
         custom_sett_file: str, optional
             Location of a JSON file with custom calculation settings as a

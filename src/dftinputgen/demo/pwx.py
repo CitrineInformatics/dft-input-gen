@@ -3,8 +3,8 @@
 import json
 import argparse
 
-from dftinpgen.utils import read_crystal_structure
-from dftinpgen.qe.pwx import PwxInputGenerator
+from dftinputgen.utils import read_crystal_structure
+from dftinputgen.qe.pwx import PwxInputGenerator
 
 
 def _get_default_parser():

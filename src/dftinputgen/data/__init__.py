@@ -18,7 +18,7 @@ Filtered as follows:
 
 """
 saw_file = pkg_resources.resource_filename(
-    "dftinpgen.data", "standard_atomic_weights.json"
+    "dftinputgen.data", "standard_atomic_weights.json"
 )
 with open(saw_file) as fr:
     STANDARD_ATOMIC_WEIGHTS = json.load(fr)
