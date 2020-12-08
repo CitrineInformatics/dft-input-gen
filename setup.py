@@ -20,6 +20,7 @@ setup(
     author_email="vhegde@citrine.io",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
+    include_package_data=True,
     install_requires=["six", "numpy", "ase <= 3.17"],
     entry_points={"console_scripts": ["dftinputgen = dftinputgen.cli:driver"]},
     classifiers=[
