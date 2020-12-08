@@ -1,14 +1,14 @@
-"""Unit tests for helper utilities in :mod:`dftinpgen.utils`."""
+"""Unit tests for helper utilities in :mod:`dftinputgen.utils`."""
 
 import os
 import pytest
 
 from ase import io as ase_io
 
-from dftinpgen.utils import get_elem_symbol
-from dftinpgen.utils import read_crystal_structure
-from dftinpgen.utils import get_kpoint_grid_from_spacing
-from dftinpgen.utils import DftinpgenUtilsError
+from dftinputgen.utils import get_elem_symbol
+from dftinputgen.utils import read_crystal_structure
+from dftinputgen.utils import get_kpoint_grid_from_spacing
+from dftinputgen.utils import DftInputGeneratorUtilsError
 
 
 test_base_dir = os.path.dirname(__file__)
@@ -19,7 +19,7 @@ feo_conv = ase_io.read(feo_conv_file)
 def test_get_elem_symbol():
     assert get_elem_symbol("Fe-34") == "Fe"
     assert get_elem_symbol("3RGe-34") == "Ge"
-    with pytest.raises(DftinpgenUtilsError):
+    with pytest.raises(DftInputGeneratorUtilsError):
         get_elem_symbol("G23")
 
 
@@ -33,4 +33,6 @@ def test_read_crystal_structure():
 
 
 def test_kpoint_grid_from_spacing():
-    assert get_kpoint_grid_from_spacing(feo_conv, 0.2) == pytest.approx([7, 7, 7])
+    assert get_kpoint_grid_from_spacing(feo_conv, 0.2) == pytest.approx(
+        [7, 7, 7]
+    )

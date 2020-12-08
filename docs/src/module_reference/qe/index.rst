@@ -3,7 +3,7 @@
 Input generators for Quantum Espresso
 +++++++++++++++++++++++++++++++++++++
 
-``dftinpgen`` provides input generator classes for codes in the `Quantum
+``dftinputgen`` provides input generator classes for codes in the `Quantum
 Espresso`_ suite.
 Currently supported codes are:
 
@@ -15,7 +15,7 @@ Currently supported codes are:
 .. _`bands.x`: https://www.quantum-espresso.org/Doc/INPUT_BANDS.html
 
 
-.. automodule:: dftinpgen.qe
+.. automodule:: dftinputgen.qe
     :members:
     :undoc-members:
 

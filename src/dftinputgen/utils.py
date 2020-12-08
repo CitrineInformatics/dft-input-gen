@@ -4,10 +4,10 @@ import numpy as np
 
 from ase import io as ase_io
 
-from dftinpgen.data import STANDARD_ATOMIC_WEIGHTS
+from dftinputgen.data import STANDARD_ATOMIC_WEIGHTS
 
 
-class DftinpgenUtilsError(Exception):
+class DftInputGeneratorUtilsError(Exception):
     """Base class for errors associated with the helper utilities."""
 
     pass
@@ -26,7 +26,7 @@ def get_elem_symbol(species_label):
         if symbol in STANDARD_ATOMIC_WEIGHTS:
             return symbol
     msg = "No valid element symbol found"
-    raise DftinpgenUtilsError(msg)
+    raise DftInputGeneratorUtilsError(msg)
 
 
 def read_crystal_structure(crystal_structure, **kwargs):

@@ -1,7 +1,7 @@
 import argparse
 
-from dftinpgen.demo.pwx import build_pwx_parser
-from dftinpgen.demo.pwx import generate_pwx_input_files
+from dftinputgen.demo.pwx import build_pwx_parser
+from dftinputgen.demo.pwx import generate_pwx_input_files
 
 
 def get_parser():

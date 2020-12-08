@@ -5,6 +5,6 @@ Helper utilities
 
 This module implements some helper utilities used across DFT packages.
 
-.. automodule:: dftinpgen.utils
+.. automodule:: dftinputgen.utils
     :members:
     :undoc-members:

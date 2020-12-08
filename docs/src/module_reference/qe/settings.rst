@@ -20,15 +20,15 @@ Note that these presets are only reasonable defaults and are not meant to be
 prescriptive.
 
 .. _`Input File Description`: https://www.quantum-espresso.org/Doc/INPUT_PW.html
-.. _`tags_and_groups.json`: https://github.com/CitrineInformatics/dft-input-gen/blob/master/src/dftinpgen/qe/settings/tags_and_groups.json 
-.. _`calculation_presets`: https://github.com/CitrineInformatics/dft-input-gen/tree/master/src/dftinpgen/qe/settings/calculation_presets
+.. _`tags_and_groups.json`: https://github.com/CitrineInformatics/dft-input-gen/blob/master/src/dftinputgen/qe/settings/tags_and_groups.json 
+.. _`calculation_presets`: https://github.com/CitrineInformatics/dft-input-gen/tree/master/src/dftinputgen/qe/settings/calculation_presets
 
-.. automodule:: dftinpgen.qe.settings
+.. automodule:: dftinputgen.qe.settings
     :members:
     :undoc-members:
     :special-members:
 
-.. automodule:: dftinpgen.qe.settings.calculation_presets
+.. automodule:: dftinputgen.qe.settings.calculation_presets
     :members:
     :undoc-members:
     :special-members:
