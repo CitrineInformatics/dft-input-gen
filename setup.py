@@ -24,7 +24,6 @@ setup(
     install_requires=["six", "numpy", "ase <= 3.17"],
     entry_points={"console_scripts": ["dftinputgen = dftinputgen.cli:driver"]},
     classifiers=[
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.8",
     ],
 )
